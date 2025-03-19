@@ -11,3 +11,48 @@ This project provides a **FastAPI**-based REST API that generates **phonetic tra
 - REST API built with **FastAPI** for easy integration
 
 ---
+
+
+## 🛠 Installation
+
+### 1️⃣ Using Conda (Recommended)
+Create and activate a Conda environment:
+
+```bash
+conda create --name phonetic-api python=3.10 -y
+conda activate phonetic-api
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Download the **CMU Pronouncing Dictionary** (only needed once):
+
+```bash
+python -c "import nltk; nltk.download('cmudict')"
+```
+
+---
+
+### 2️⃣ Using Python Virtual Environment (venv)
+If you prefer using **venv**, follow these steps:
+
+```bash
+# Create a virtual environment
+python -m venv venv
+
+# Activate the environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Download CMUdict (only needed once)
+python -c "import nltk; nltk.download('cmudict')"
+```
