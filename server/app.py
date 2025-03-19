@@ -325,7 +325,31 @@ class NameRequest(BaseModel):
 def root():
     return RedirectResponse(url="/docs")
 
-def get_phonetic_transcription(name: str, country: str):
+def get_english_phonetic(name: str) -> str:
+    """Get phonetic transcription for English using CMU Pronouncing Dictionary."""
+    if name.lower() in pron_dict:
+        return " ".join(pron_dict[name.lower()][0])
+    return "Phonetic transcription not found in CMU dictionary."
+
+
+def get_japanese_phonetic(name: str) -> str:
+    """Get phonetic transcription for Japanese using pyopenjtalk."""
+    return pyopenjtalk.g2p(name)
+
+
+def get_epitran_phonetic(name: str, language_code: str) -> str:
+    """Get phonetic transcription using epitran for the given language code."""
+    try:
+        epi = epitran.Epitran(language_code)
+        return epi.transliterate(name)
+    except FileNotFoundError:
+        return (
+            f"Phonetic transcription not supported for language code: {language_code}."
+        )
+
+
+def get_phonetic_transcription(name: str, country: str) -> dict:
+    """Returns phonetic transcription and generates audio file."""
     country = country.lower()
 
     if country not in COUNTRY_LANGUAGE_MAP:
@@ -333,26 +357,36 @@ def get_phonetic_transcription(name: str, country: str):
 
     language = COUNTRY_LANGUAGE_MAP[country]
 
-    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    unique_id = uuid.uuid4().hex[:6]
-    audio_filename = f"{name}_{country}_{timestamp}_{unique_id}.mp3"
+    # Generating a unique filename
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Current timestamp
+    unique_id = uuid.uuid4().hex[:6]  # Random unique identifier
+    audio_filename = f"{name}{country}{timestamp}_{unique_id}.mp3"
     audio_file = f"{AUDIO_DIR}/{audio_filename}"
 
-    if language == "english" and name.lower() in pron_dict:
-        phonetic = " ".join(pron_dict[name.lower()][0])
-    elif language == "japanese":
-        phonetic = pyopenjtalk.g2p(name)
-    elif language in LANGUAGE_MAP:
-        epi = epitran.Epitran(LANGUAGE_MAP[language])
-        phonetic = epi.transliterate(name)
-    else:
-        phonetic = "Language not supported!"
+    # Language-specific handlers
+    language_handlers = {
+        "english": get_english_phonetic,
+        "japanese": get_japanese_phonetic,
+    }
 
-    tts_lang = TTS_LANGUAGE_MAP.get(language, "en")
+    # Get phonetic transcription
+    if language in language_handlers:
+        phonetic = language_handlers[language](name)
+    elif language in LANGUAGE_MAP:
+        phonetic = get_epitran_phonetic(name, LANGUAGE_MAP[language])
+    else:
+        phonetic = f"Language not supported: {language}."
+
+    # Generate audio
+    tts_lang = TTS_LANGUAGE_MAP.get(language, "en")  # Default to English if not found
     tts = gTTS(text=name, lang=tts_lang)
     tts.save(audio_file)
 
-    return {"name": name, "phonetic_transcription": phonetic, "audio_file": audio_filename}
+    return {
+        "name": name,
+        "phonetic_transcription": phonetic,
+        "audio_file": audio_filename,  # Return only the filename
+    }
 
 @app.post("/transcription")
 def transcription(request: NameRequest):
