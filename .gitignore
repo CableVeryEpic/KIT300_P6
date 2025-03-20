@@ -1,1 +1,5 @@
 /node_modules
+*.pyc
+/server/myenv
+/server/__pycache__
+/server/audio
