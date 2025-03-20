@@ -3,11 +3,12 @@ import os
 import sys
 import uuid
 import epitran
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import RedirectResponse
 from gtts import gTTS
 import nltk
 from nltk.corpus import cmudict
+import pandas as pd
 from pydantic import BaseModel
 import pyopenjtalk
 
@@ -396,3 +397,28 @@ def get_phonetic_transcription(name: str, country: str) -> dict:
 @app.post("/transcription")
 def transcription(request: NameRequest):
     return get_phonetic_transcription(request.name, request.country)
+
+@app.post("/batch-transcription")
+async def batch_transcription(file: UploadFile = File(...)):
+    """Processes a batch file and returns transcriptions with audio."""
+    try:
+        # Read file
+        if file.filename.endswith(".csv"):
+            df = pd.read_csv(file.file)
+        elif file.filename.endswith(".xlsx"):
+            df = pd.read_excel(file.file)
+        else:
+            return {"error": "Unsupported file format. Use CSV or Excel."}
+
+        if "Name" not in df.columns or "Country" not in df.columns:
+            return {"error": "File must contain 'Name' and 'Country' columns."}
+
+        # Process each row
+        results = []
+        for _, row in df.iterrows():
+            result = get_phonetic_transcription(row["Name"], row["Country"])
+            results.append(result)
+
+        return {"processed_data": results}
+    except (pd.errors.EmptyDataError, pd.errors.ParserError, ValueError) as e:
+        return {"error": str(e)}
