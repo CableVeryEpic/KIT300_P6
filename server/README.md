@@ -76,25 +76,83 @@ You can also explore the interactive API documentation at:
 
 ## 📌 API Endpoints
 
-### 1️⃣ Get Phonetic Transcription
+### 1️⃣ Get Supported Countries
 ```http
-POST /transcription/
+GET /supported-countries
+```
+**Response JSON:**
+```json
+[
+    "usa",
+    "india",
+    "japan",
+    "france",
+    "germany"
+]
+```
+
+---
+
+### 2️⃣ Get Phonetic Transcription
+```http
+POST /transcription
 ```
 **Request JSON:**
 ```json
 {
     "name": "John",
-    "country": "USA"
+    "country": "usa"
 }
 ```
 **Response JSON:**
 ```json
 {
     "name": "John",
-    "country": "USA",
-    "phonetic": "JH AA N"
+    "phonetic_transcription": "JH AA N",
+    "audio_file": "Johnusa20231010120000_abc123.mp3"
 }
 ```
+
+---
+
+### 3️⃣ Batch Transcription
+```http
+POST /batch-transcription
+```
+**Request:**
+- Upload a CSV or Excel file with columns `Name` and `Country`.
+
+**Example CSV:**
+```csv
+Name,Country
+John,usa
+Priya,india
+Yuki,japan
+```
+
+**Response JSON:**
+```json
+{
+    "processed_data": [
+        {
+            "name": "John",
+            "phonetic_transcription": "JH AA N",
+            "audio_file": "Johnusa20231010120000_abc123.mp3"
+        },
+        {
+            "name": "Priya",
+            "phonetic_transcription": "P R IY Y AH",
+            "audio_file": "Priyaindia20231010120001_def456.mp3"
+        },
+        {
+            "name": "Yuki",
+            "phonetic_transcription": "Y UW K IY",
+            "audio_file": "Yukijapan20231010120002_ghi789.mp3"
+        }
+    ]
+}
+```
+
 ---
 
 ## 🛠 Fixes and Enhancements
