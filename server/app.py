@@ -325,6 +325,11 @@ class NameRequest(BaseModel):
 def root():
     return RedirectResponse(url="/docs")
 
+@app.get("/supported-countries")
+def get_supported_countries():
+    """Returns a list of supported countries."""
+    return list(COUNTRY_LANGUAGE_MAP.keys())
+
 def get_english_phonetic(name: str) -> str:
     """Get phonetic transcription for English using CMU Pronouncing Dictionary."""
     if name.lower() in pron_dict:
