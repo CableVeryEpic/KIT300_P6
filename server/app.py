@@ -3,6 +3,8 @@ import os
 import sys
 import uuid
 import epitran
+import pykakasi
+from indic_transliteration.sanscript import transliterate, ITRANS, DEVANAGARI
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -347,9 +349,21 @@ def get_english_phonetic(name: str) -> str:
 
 
 def get_japanese_phonetic(name: str) -> str:
-    """Get phonetic transcription for Japanese using pyopenjtalk."""
-    return pyopenjtalk.g2p(name)
+    """Get phonetic transcription for Japanese using kakasi transliteration then epitran."""
+    kakasi = pykakasi.kakasi()
+    kakasi.setMode("H", "H")  # Hiragana
+    kakasi.setMode("K", "H")  # Katakana to Hiragana
+    kakasi.setMode("J", "H")  # Kanji to Hiragana
+    kakasi.setMode("r", "Hepburn")  # Use Hepburn romaji if needed
 
+    converter = kakasi.getConverter()
+    hira = converter.do(name)
+    return get_epitran_phonetic(hira, 'jpn-Hrgn')
+
+def get_hindi_phonetic(name: str) -> str:
+    """Get phonetic transcription for hindi using transliteration then epitran"""
+    devanagari = transliterate(name, ITRANS, DEVANAGARI)
+    return get_epitran_phonetic(devanagari, 'hin-Deva')
 
 def get_epitran_phonetic(name: str, language_code: str) -> str:
     """Get phonetic transcription using epitran for the given language code."""
@@ -381,6 +395,7 @@ def get_phonetic_transcription(name: str, country: str) -> str:
     language_handlers = {
         "english": get_english_phonetic,
         "japanese": get_japanese_phonetic,
+        "hindi": get_hindi_phonetic,
     }
 
     # Get phonetic transcription
