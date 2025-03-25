@@ -2,9 +2,10 @@
   "name": "kit300_p6",
   "version": "1.0.0",
   "description": "A name to IPA converter with audio representation",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,12 @@
   },
   "homepage": "https://github.com/CableVeryEpic/KIT300_P6#readme",
   "dependencies": {
+    "csv-parser": "^3.2.0",
+    "dotenv": "^16.4.7",
+    "fs": "^0.0.1-security",
     "openai": "^4.87.4"
+  },
+  "devDependencies": {
+    "electron": "^35.0.2"
   }
 }

@@ -4,7 +4,9 @@ import sys
 import uuid
 import epitran
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
+from io import StringIO
 from gtts import gTTS
 import nltk
 from nltk.corpus import cmudict
@@ -14,6 +16,12 @@ import pyopenjtalk
 
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Downloading CMU Pronouncing Dictionary 
 nltk.download("cmudict")
@@ -200,7 +208,7 @@ LANGUAGE_MAP = {
     "cebuano": "ceb-Latn",
     "czech": "ces-Latn",
     "jin": "cjy-Latn",
-    "mandarin": "cmn-Hans",
+    "chinese": "cmn-Latn",
     "sorani": "ckb-Arab",
     "kashubian": "csb-Latn",
     "german": "deu-Latn",
@@ -354,7 +362,7 @@ def get_epitran_phonetic(name: str, language_code: str) -> str:
         )
 
 
-def get_phonetic_transcription(name: str, country: str) -> dict:
+def get_phonetic_transcription(name: str, country: str) -> str:
     """Returns phonetic transcription and generates audio file."""
     country = country.lower()
 
@@ -388,11 +396,7 @@ def get_phonetic_transcription(name: str, country: str) -> dict:
     tts = gTTS(text=name, lang=tts_lang)
     tts.save(audio_file)
 
-    return {
-        "name": name,
-        "phonetic_transcription": phonetic,
-        "audio_file": audio_filename,  # Return only the filename
-    }
+    return phonetic
 
 @app.post("/transcription")
 def transcription(request: NameRequest):
@@ -416,9 +420,19 @@ async def batch_transcription(file: UploadFile = File(...)):
         # Process each row
         results = []
         for _, row in df.iterrows():
-            result = get_phonetic_transcription(row["Name"], row["Country"])
+            result = {"Name":row["Name"], "Country":row["Country"], "Translation":get_phonetic_transcription(row["Name"], row["Country"])}
             results.append(result)
 
-        return {"processed_data": results}
+        output_df = pd.DataFrame(results)
+        csv_buffer = StringIO()
+        output_df.to_csv(csv_buffer, index=False)
+        csv_buffer.seek(0)
+
+        return StreamingResponse(
+            csv_buffer,
+            media_type="text/csv",
+            headers={"Content-Disposition": "attachment; filename=transcription_output.csv"},
+            )
+
     except (pd.errors.EmptyDataError, pd.errors.ParserError, ValueError) as e:
         return {"error": str(e)}
