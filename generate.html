@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style/style.css">
+        <meta charset="UTF-8">
+        <meta name="author" content="Midori Sugie">
+        <title>Name Phonetics Generator</title>
+    </head>
+    <body>
+        <header>
+            <h1>Name Phonetics Generator</h1>
+        </header>
+        <main>
+            <h2>Phonetics and Audio Representitve of names</h2>
+
+            <a href class="download btn">download a csv file</a>
+
+            <table id="phonetics-table">
+                <thead>
+                    <tr id="features-row">
+                        <th class="name-col">Name</th>
+                        <th class="country-col">Country</th>
+                        <th class="phonetics-col">Phonetics</th>
+                        <th class="audio-col">Audio</th>
+                    </tr>
+                </thead>
+                <!--this holds dummy datasets-->
+                <tbody>
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+
+
+
+
+
+                    <!--dupes-->
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Donald Trump</td>
+                        <td class="country-col">USA</td>
+                        <td class="phonetics-col">dɑː.nəld ˈtɹʌmp</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/donald.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Priyanka Chopra</td>
+                        <td class="country-col">India</td>
+                        <td class="phonetics-col">prɪˈjʌŋ.kɑː ˈtʃoːp.ɾaː</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/priyanka.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name-col">Quan Bai</td>
+                        <td class="country-col">China</td>
+                        <td class="phonetics-col">tɕʰɥɛ̌n pǎɪ</td>
+                        <td class="audio-col">
+                            <audio controls>
+                                <source src="audio/quan.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                            </audio>
+                        </td>
+                    </tr>
+
+
+
+
+
+
+
+
+                </tbody>
+            </table>
+
+            <a href="index.html" class="upload btn">upload a different csv file</a>
+        </main>
+        <footer>name phonetics generator</footer>
+    </body>
+</html>

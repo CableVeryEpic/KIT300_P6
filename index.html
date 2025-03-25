@@ -1,3 +1,25 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style/style.css">
+        <meta charset="UTF-8">
+        <meta name="author" content="Midori Sugie">
+        <title>Name Phonetics Generator</title>
+    </head>
+    <body>
+        <header>
+            <h1>Name Phonetics Generator</h1>
+        </header>
+        <main>
+            <p id="description">Name Phonetics Generator will produce International Phonetic Alphabet of names given and their audio representation. Upload a csv file below. (your csv file needs to contain names and their country of origin only)</p>
+            <form method="GET">
+                <label for="input">Upload a csv file</label>
+                <input type="file" id="input" name="input" accept=".csv, .xls, .xlsx" required>
+                <button type="submit" class="btn">GENERATE</button>
+                <button type="reset" class="btn">Reset</button>
+            </form>
+        </main>
+        <footer>name phonetics generator</footer>
+    </body>
 </html>
-
