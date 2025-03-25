@@ -1,39 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="style/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electron AI CSV</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        textarea { width: 80%; height: 100px; margin: 10px 0; }
-        button { padding: 10px; margin: 5px; cursor: pointer; }
-    </style>
+    <meta name="author" content="Midori Sugie, Caleb Wittmer">
+    <title>Name Phonetics Generator</title>
 </head>
 <body>
-    <h1>Electron AI CSV Generator</h1>
-    <input type="file" id="studentlist" name="studentlist"></input>
-    <button onclick="upload()">Generate</button>
-    <p id="generatedOutput"></p>
-    <button onclick="saveToCSV()" style="display:none;">Save to CSV</button>
-
+    <header>
+        <h1>Name Phonetics Generator</h1>
+    </header>
+    <main>
+        <p id="description">Name Phonetics Generator will produce International Phonetic Alphabet of names given and their audio representation. Upload a csv file below. (your csv file needs to contain names and their country of origin only)</p>
+        <label for="input">Upload a csv file</label>
+        <input type="file" id="input" name="input" accept=".csv, .xls, .xlsx" required>
+        <button class="btn" onclick="upload()">GENERATE</button>
+    </main>
+    <footer>name phonetics generator</footer>
     <script>
         async function generateContent() {
-            const input = document.getElementById("userInput").value;
-            const output = await window.electronAPI.generateContent(input);
 
-            document.getElementById("generatedOutput").innerText = "AI Output: " + output;
-            document.querySelector("button[onclick='saveToCSV()']").style.display = "inline-block";
         }
 
         async function saveToCSV() {
-            const output = document.getElementById("generatedOutput").innerText.replace("AI Output: ", "");
-            const response = await window.electronAPI.updateCSV(output);
-            alert(response);
+
         }
 
         async function upload() {
-            const fileInput = document.getElementById("studentlist");
+            const fileInput = document.getElementById("input");
             const file = fileInput.files[0];
 
             if (!file) {
