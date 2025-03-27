@@ -33,7 +33,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
         const arrayBuffer = await blob.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
     
-        const downloadsDir = path.join(os.homedir(), "Downloads");
+        const downloadsDir = path.join(os.homedir(), "Documents/Uni\ Study/KIT300");
         const outputPath = path.join(downloadsDir, "phonetic_results.csv");
     
         fs.writeFileSync(outputPath, buffer);
