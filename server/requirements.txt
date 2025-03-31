@@ -19,6 +19,8 @@ numpy==2.2.4
 openpyxl==3.1.5
 pandas==2.2.3
 panphon==0.21.2
+pykakasi
+indic_transliteration
 pydantic 
 pydantic_core
 pyopenjtalk==0.4.0
