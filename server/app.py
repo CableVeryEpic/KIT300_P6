@@ -6,7 +6,7 @@ import epitran
 import pykakasi
 from indic_transliteration.sanscript import transliterate, ITRANS, DEVANAGARI
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import RedirectResponse, StreamingResponse
+from fastapi.responses import RedirectResponse, StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from io import StringIO
 from gtts import gTTS
@@ -417,9 +417,9 @@ def get_phonetic_transcription(name: str, country: str) -> str:
         phonetic = f"Language not supported: {language}."
 
     # Generate audio
-    tts_lang = TTS_LANGUAGE_MAP.get(language, "en")  # Default to English if not found
-    tts = gTTS(text=name, lang=tts_lang)
-    tts.save(audio_file)
+    # tts_lang = TTS_LANGUAGE_MAP.get(language, "en")  # Default to English if not found
+    # tts = gTTS(text=name, lang=tts_lang)
+    # tts.save(audio_file)
 
     return {
         "name": name,
@@ -457,11 +457,7 @@ async def batch_transcription(file: UploadFile = File(...)):
         output_df.to_csv(csv_buffer, index=False)
         csv_buffer.seek(0)
 
-        return StreamingResponse(
-            csv_buffer,
-            media_type="text/csv",
-            headers={"Content-Disposition": "attachment; filename=transcription_output.csv"},
-            )
+        return JSONResponse(content=results)
 
     except (pd.errors.EmptyDataError, pd.errors.ParserError, ValueError) as e:
         return {"error": str(e)}

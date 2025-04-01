@@ -29,15 +29,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
             throw new Error(`Failed: ${errorText}`);
         }
       
-        const blob = await response.blob();
-        const arrayBuffer = await blob.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-    
-        const downloadsDir = path.join(os.homedir(), "Documents/Uni\ Study/KIT300");
-        const outputPath = path.join(downloadsDir, "phonetic_results.csv");
-    
-        fs.writeFileSync(outputPath, buffer);
-    
-        return outputPath; // For confirmation
+        const data = await response.json();
+
+        sessionStorage.setItem("transcriptionData", JSON.stringify(data))
+
+        window.location.href = "generate.html";
+
+        return data; // For confirmation
     }
 });
