@@ -449,13 +449,8 @@ async def batch_transcription(file: UploadFile = File(...)):
         # Process each row
         results = []
         for _, row in df.iterrows():
-            result = {"Name":row["Name"], "Country":row["Country"], "Translation":get_phonetic_transcription(row["Name"], row["Country"])}
+            result = {"Name":row["Name"], "Country":row["Country"], "Translation":get_phonetic_transcription(row["Name"], row["Country"])["phonetic_transcription"]}
             results.append(result)
-
-        output_df = pd.DataFrame(results)
-        csv_buffer = StringIO()
-        output_df.to_csv(csv_buffer, index=False)
-        csv_buffer.seek(0)
 
         return JSONResponse(content=results)
 
