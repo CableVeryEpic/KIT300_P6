@@ -18,14 +18,24 @@ import pyopenjtalk
 
 
 app = FastAPI()
+# Add CORS middleware
+origins = [
+    "http://localhost:3000",  # Allow local development
+    "*",  # Allow local development
+    "https://phonetics-client.vercel.app",  # Allow your production frontend
+    "https://*.vercel.app",  # Allow all Vercel deployments (optional)
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
 )
 
-# Downloading CMU Pronouncing Dictionary 
+
+# Downloading CMU Pronouncing Dictionary
 nltk.download("cmudict")
 pron_dict = cmudict.dict()
 epitran.download.cedict()
@@ -34,7 +44,7 @@ epitran.download.cedict()
 AUDIO_DIR = "audio"
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
-# Country to Language Mapping 
+# Country to Language Mapping
 COUNTRY_LANGUAGE_MAP = {
     "australia": "english",
     "usa": "english",
@@ -291,7 +301,7 @@ LANGUAGE_MAP = {
     "zulu": "zul-Latn",
 }
 
-# TTS Language Mapping 
+# TTS Language Mapping
 TTS_LANGUAGE_MAP = {
     "english": "en",
     "nepali": "ne",
@@ -411,7 +421,11 @@ def get_phonetic_transcription(name: str, country: str) -> str:
     tts = gTTS(text=name, lang=tts_lang)
     tts.save(audio_file)
 
-    return phonetic
+    return {
+        "name": name,
+        "phonetic_transcription": phonetic,
+        "audio_file": audio_filename,  # Return only the filename
+    }
 
 @app.post("/transcription")
 def transcription(request: NameRequest):
