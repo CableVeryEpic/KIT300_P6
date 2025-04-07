@@ -4,8 +4,6 @@ const path = require("path");
 const os = require("os");
 
 contextBridge.exposeInMainWorld("electronAPI", {
-    generateContent: (prompt) => ipcRenderer.invoke("generate-content", prompt),
-    updateCSV: (content) => ipcRenderer.invoke("update-csv", content),
     getPhoneticTranscription: async (name, country) => {
         const response = await fetch("http://localhost:8000/transcription", {
         method: "POST",

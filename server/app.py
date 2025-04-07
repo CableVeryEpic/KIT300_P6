@@ -5,6 +5,7 @@ import uuid
 import epitran
 import pykakasi
 from indic_transliteration.sanscript import transliterate, ITRANS, DEVANAGARI
+# from sinlingua.singlish.rulebased_transliterator import RuleBasedTransliterator
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import RedirectResponse, StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -375,6 +376,12 @@ def get_hindi_phonetic(name: str) -> str:
     devanagari = transliterate(name, ITRANS, DEVANAGARI)
     return get_epitran_phonetic(devanagari, 'hin-Deva')
 
+# def get_sinhala_phonetic(name: str) -> str:
+#     """Get phonetic transcription for hindi using sinlingua then epitran"""
+#     transliterator = RuleBasedTransliterator()
+#     sinhala = transliterator.transliterator(name)
+#     return get_epitran_phonetic(sinhala, 'sin-Sinh')
+
 def get_epitran_phonetic(name: str, language_code: str) -> str:
     """Get phonetic transcription using epitran for the given language code."""
     try:
@@ -403,7 +410,7 @@ def get_phonetic_transcription(name: str, country: str) -> str:
 
     # Language-specific handlers
     language_handlers = {
-        "english": get_english_phonetic,
+        #"english": get_english_phonetic,
         "japanese": get_japanese_phonetic,
         "hindi": get_hindi_phonetic,
     }

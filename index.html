@@ -19,14 +19,6 @@
     </main>
     <footer>name phonetics generator</footer>
     <script>
-        async function generateContent() {
-
-        }
-
-        async function saveToCSV() {
-
-        }
-
         async function upload() {
             const fileInput = document.getElementById("input");
             const file = fileInput.files[0];
@@ -37,7 +29,7 @@
             }
 
             try {
-                const savedPath = await window.electronAPI.uploadFile(file);
+                await window.electronAPI.uploadFile(file);
             } catch (err) {
                 alert("Error: " + err.message);
             }
