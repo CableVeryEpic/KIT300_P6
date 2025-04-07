@@ -19,7 +19,8 @@
             <table id="phonetics-table">
                 <thead>
                     <tr id="features-row">
-                        <th class="name-col">Name</th>
+                        <th class="first-col">Fisrt</th>
+                        <th class="last-col">Last</th>
                         <th class="country-col">Country</th>
                         <th class="phonetics-col">Phonetics</th>
                         <th class="audio-col">Audio</th>
@@ -42,10 +43,15 @@
                 transcriptionData.forEach(result => {
                     const row = document.createElement("tr");
     
-                    const nameCell = document.createElement("td");
-                    nameCell.classList.add("name-col");
-                    nameCell.textContent = result.Name;
-                    row.appendChild(nameCell);
+                    const firstCell = document.createElement("td");
+                    firstCell.classList.add("first-col");
+                    firstCell.textContent = result.First;
+                    row.appendChild(firstCell);
+
+                    const lastCell = document.createElement("td");
+                    lastCell.classList.add("last-col");
+                    lastCell.textContent = result.Last;
+                    row.appendChild(lastCell);
     
                     const countryCell = document.createElement("td");
                     countryCell.classList.add("country-col");

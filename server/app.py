@@ -443,13 +443,14 @@ async def batch_transcription(file: UploadFile = File(...)):
         else:
             return {"error": "Unsupported file format. Use CSV or Excel."}
 
-        if "Name" not in df.columns or "Country" not in df.columns:
-            return {"error": "File must contain 'Name' and 'Country' columns."}
+        if "Fisrt" not in df.columns or "Last" not in df.columns or "Country" not in df.columns:
+            return {"error": "File must contain 'Fisrt', 'Last' and 'Country' columns."}
 
         # Process each row
         results = []
         for _, row in df.iterrows():
-            result = {"Name":row["Name"], "Country":row["Country"], "Translation":get_phonetic_transcription(row["Name"], row["Country"])["phonetic_transcription"]}
+            full_name = f"{row['First']} {row['Last']}"
+            result = {"Fisrt":row["Fisrt"], "Last":row["Last"], "Country":row["Country"], "Translation":get_phonetic_transcription(full_name, row["Country"])["phonetic_transcription"]}
             results.append(result)
 
         return JSONResponse(content=results)
