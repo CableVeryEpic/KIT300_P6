@@ -34,7 +34,7 @@
         <div id="manual-section" style="display: none;">
             <p id="manual-description">Name Phonetics Generator will produce International Phonetic Alphabet of names given and their audio representation. Enter a first name, last name and its country of origin.</p>
             <label for="manual-first">First Name:</label>
-            <input type="text" id="manual-fisrt" placeholder="e.g. Matt"><br>
+            <input type="text" id="manual-first" placeholder="e.g. Matt"><br>
             <label for="manual-last">Last Name:</label>
             <input type="text" id="manual-last" placeholder="e.g. King"><br>
             <label for="manual-country">Country:</label>
@@ -79,14 +79,16 @@
         const last = document.getElementById("manual-last").value.trim();
         const country = document.getElementById("manual-country").value.trim();
 
-        if (!first || !last || !country) {
-            alert("Please enter first name, last name and country of origin.");
+        if (!first || !last) {
+            alert("Please enter first name, last name and optionally country of origin.");
             return;
         }
 
-        const singleData = [{ First: first, Last: last, Country: country }];
-        sessionStorage.setItem("transcriptionData", JSON.stringify(singleData));
-        window.location.href = "generate.html";
+        try {
+            await window.electronAPI.transcribeSingle(first, last, country)
+        } catch (err) {
+            alert("Error: " + err.message);
+        }
     }
     </script>
 </body>

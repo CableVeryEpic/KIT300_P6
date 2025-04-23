@@ -10,7 +10,7 @@ import subprocess
 from dotenv import load_dotenv
 from indic_transliteration.sanscript import transliterate, ITRANS, DEVANAGARI
 # from sinlingua.singlish.rulebased_transliterator import RuleBasedTransliterator
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Body
 from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from io import StringIO
@@ -460,8 +460,31 @@ def get_phonetic_transcription(name: str, country: str):
     }
 
 @app.post("/transcription")
-def transcription(request: NameRequest):
-    return get_phonetic_transcription(request.name, request.country)
+async def transcription(data: dict = Body(...)):
+    first = data.get("First")
+    last = data.get("Last")
+    country = data.get("Country")
+
+    full_name = f'{first} {last}'
+
+    if country == "":
+        languages = list()
+        transcriptions = list()
+        filenames = list()
+        usages = getUsages(full_name)
+        
+        for usage in usages:
+            languages.append(usage)
+            transcriptionData = get_phonetic_transcription(full_name, usage)
+            transcriptions.append(transcriptionData["phonetic_transcription"])
+            filenames.append(transcriptionData["audio_file"])
+
+        result = {"First":first, "Last":last, "Country":languages, "Translation":transcriptions, "Filename":filenames}
+    else:
+        transcriptionData = get_phonetic_transcription(full_name, country)
+        result = {"First":first, "Last":last, "Country":[country], "Translation":[transcriptionData["phonetic_transcription"]], "Filename":[transcriptionData["audio_file"]]}
+    
+    return [result]
 
 @app.post("/batch-transcription")
 async def batch_transcription(file: UploadFile = File(...)):
@@ -484,28 +507,12 @@ async def batch_transcription(file: UploadFile = File(...)):
             full_name = f"{row['First']} {row['Last']}"
             if pd.isnull(row['Country']):
                 
-                usages = set()
                 languages = list()
                 transcriptions = list()
                 filenames = list()
 
-                for word in str.split(full_name):
-                    btn_url = f"https://www.behindthename.com/api/lookup.json?name={word}&key={BTN_API_KEY}"
-
-                    response = requests.get(btn_url)
-
-                    if response.status_code == 200:
-                        data = response.json()
-                        if data:
-                            if 'error' in data:
-                                print("error")
-                            else:
-                                info = data[0]
-                                print(info.get('usages'))
-                                for usage in info.get('usages'):
-                                    usages.add(usage["usage_full"])
-                    time.sleep(1)
-
+                usages = getUsages(full_name)
+                
                 for usage in usages:
                     languages.append(usage)
                     transcriptionData = get_phonetic_transcription(full_name, usage)
@@ -524,3 +531,24 @@ async def batch_transcription(file: UploadFile = File(...)):
 
     except (pd.errors.EmptyDataError, pd.errors.ParserError, ValueError) as e:
         return {"error": str(e)}
+
+def getUsages(name: str):
+    usages = set()
+
+    for word in str.split(name):
+        btn_url = f"https://www.behindthename.com/api/lookup.json?name={word}&key={BTN_API_KEY}"
+
+        response = requests.get(btn_url)
+
+        if response.status_code == 200:
+            data = response.json()
+            if data:
+                if 'error' in data:
+                    print("error")
+                else:
+                    info = data[0]
+                    print(info.get('usages'))
+                    for usage in info.get('usages'):
+                        usages.add(usage["usage_full"])
+        time.sleep(1)
+    return usages

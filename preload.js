@@ -34,5 +34,33 @@ contextBridge.exposeInMainWorld("electronAPI", {
         window.location.href = "generate.html";
 
         return data; // For confirmation
+    },
+    transcribeSingle: async (first, last, country) => {
+        const formData = {
+            First: first,
+            Last: last,
+            Country: country
+        };
+
+        const response = await fetch('http://localhost:8000/transcription', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed: ${errorText}`);
+        }
+
+        const data = await response.json();
+
+        sessionStorage.setItem("transcriptionData", JSON.stringify(data))
+
+        window.location.href = "generate.html";
+
+        return data; // For confirmation
     }
 });
