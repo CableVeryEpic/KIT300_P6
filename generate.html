@@ -79,10 +79,17 @@
 
                     const audioCell = document.createElement("td");
                     audioCell.classList.add("audio-col");
-                    audioCell.innerHTML = `<audio controls>
-                                            <source src="" type="audio/mpeg">
+
+                    const audioList = document.createElement("ul");
+                    result.Filename.forEach(file => {
+                        let audioItem = document.createElement("li");
+                        audioItem.innerHTML = `<audio controls>
+                                            <source src="./server/${file}" type="audio/mpeg">
                                             Your browser does not support the audio element.
                                             </audio>`;
+                        audioList.appendChild(audioItem);
+                    });
+                    audioCell.appendChild(audioList);
                     row.appendChild(audioCell);
 
                     tableBody.appendChild(row);

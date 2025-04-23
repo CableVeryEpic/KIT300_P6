@@ -456,7 +456,7 @@ def get_phonetic_transcription(name: str, country: str):
     return {
         "name": name,
         "phonetic_transcription": phonetic,
-        "audio_file": audio_filename,  # Return only the filename
+        "audio_file": audio_file,  # Return only the filename
     }
 
 @app.post("/transcription")
@@ -484,8 +484,11 @@ async def batch_transcription(file: UploadFile = File(...)):
             full_name = f"{row['First']} {row['Last']}"
             if pd.isnull(row['Country']):
                 
-                languages = set()
-                transcriptions = set()
+                usages = set()
+                languages = list()
+                transcriptions = list()
+                filenames = list()
+
                 for word in str.split(full_name):
                     btn_url = f"https://www.behindthename.com/api/lookup.json?name={word}&key={BTN_API_KEY}"
 
@@ -498,18 +501,21 @@ async def batch_transcription(file: UploadFile = File(...)):
                                 print("error")
                             else:
                                 info = data[0]
-                                usages = info.get('usages')
-                                for usage in usages:
-                                    language = usage["usage_full"]
-                                    languages.add(language)
+                                print(info.get('usages'))
+                                for usage in info.get('usages'):
+                                    usages.add(usage["usage_full"])
                     time.sleep(1)
 
-                for language in languages:
-                    transcriptions.add(get_phonetic_transcription(full_name, language)["phonetic_transcription"])
+                for usage in usages:
+                    languages.append(usage)
+                    transcriptionData = get_phonetic_transcription(full_name, usage)
+                    transcriptions.append(transcriptionData["phonetic_transcription"])
+                    filenames.append(transcriptionData["audio_file"])
 
-                result = {"First":row["First"], "Last":row["Last"], "Country":list(languages), "Translation":list(transcriptions)}
+                result = {"First":row["First"], "Last":row["Last"], "Country":languages, "Translation":transcriptions, "Filename":filenames}
             else:
-                result = {"First":row["First"], "Last":row["Last"], "Country":[row["Country"]], "Translation":[get_phonetic_transcription(full_name, row["Country"])["phonetic_transcription"]]}
+                transcriptionData = get_phonetic_transcription(full_name, row["Country"])
+                result = {"First":row["First"], "Last":row["Last"], "Country":[row["Country"]], "Translation":[transcriptionData["phonetic_transcription"]], "Filename":[transcriptionData["audio_file"]]}
                     
             print(result)
             results.append(result)
