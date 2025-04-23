@@ -1,21 +1,29 @@
 import datetime
 import os
 import sys
+import time
 import uuid
 import epitran
 import pykakasi
+import requests
+import subprocess
+from dotenv import load_dotenv
 from indic_transliteration.sanscript import transliterate, ITRANS, DEVANAGARI
 # from sinlingua.singlish.rulebased_transliterator import RuleBasedTransliterator
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import RedirectResponse, StreamingResponse, JSONResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from io import StringIO
-from gtts import gTTS
 import nltk
 from nltk.corpus import cmudict
 import pandas as pd
+import numpy as np
 from pydantic import BaseModel
 import pyopenjtalk
+import gruut_ipa
+import boto3
+
+BTN_API_KEY = "ca828435848"
 
 
 app = FastAPI()
@@ -393,14 +401,21 @@ def get_epitran_phonetic(name: str, language_code: str) -> str:
         )
 
 
-def get_phonetic_transcription(name: str, country: str) -> str:
+def get_phonetic_transcription(name: str, country: str):
     """Returns phonetic transcription and generates audio file."""
     country = country.lower()
 
-    if country not in COUNTRY_LANGUAGE_MAP:
-        return {"error": "Country not supported!"}
-
-    language = COUNTRY_LANGUAGE_MAP[country]
+    language = ""
+    if country in COUNTRY_LANGUAGE_MAP:
+        language = COUNTRY_LANGUAGE_MAP[country]
+    elif country in COUNTRY_LANGUAGE_MAP.values():
+        language = country
+    else:
+        return {
+            "name": name,
+            "phonetic_transcription": "Country not supported",
+            "audio_file": "",  # Return only the filename
+        }
 
     # Generating a unique filename
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")  # Current timestamp
@@ -423,10 +438,20 @@ def get_phonetic_transcription(name: str, country: str) -> str:
     else:
         phonetic = f"Language not supported: {language}."
 
-    # Generate audio
-    # tts_lang = TTS_LANGUAGE_MAP.get(language, "en")  # Default to English if not found
-    # tts = gTTS(text=name, lang=tts_lang)
-    # tts.save(audio_file)
+    print(phonetic)
+
+    polly = boto3.Session(profile_name="cable").client("polly")
+
+    ssml_input = f"""<speak><phoneme alphabet="ipa" ph="{phonetic}">{name}</phoneme></speak>"""
+    
+    response = polly.synthesize_speech(
+        TextType="ssml",
+        Text=ssml_input,
+        OutputFormat="mp3",
+        VoiceId="Joanna"
+    )
+    with open(audio_file, "wb") as f:
+        f.write(response["AudioStream"].read())
 
     return {
         "name": name,
@@ -450,13 +475,43 @@ async def batch_transcription(file: UploadFile = File(...)):
         else:
             return {"error": "Unsupported file format. Use CSV or Excel."}
 
-        if "Name" not in df.columns or "Country" not in df.columns:
-            return {"error": "File must contain 'Name' and 'Country' columns."}
+        if "First" not in df.columns or "Last" not in df.columns or "Country" not in df.columns:
+            return {"error": "File must contain 'First', 'Last' and 'Country' columns."}
 
         # Process each row
         results = []
         for _, row in df.iterrows():
-            result = {"Name":row["Name"], "Country":row["Country"], "Translation":get_phonetic_transcription(row["Name"], row["Country"])["phonetic_transcription"]}
+            full_name = f"{row['First']} {row['Last']}"
+            if pd.isnull(row['Country']):
+                
+                languages = set()
+                transcriptions = set()
+                for word in str.split(full_name):
+                    btn_url = f"https://www.behindthename.com/api/lookup.json?name={word}&key={BTN_API_KEY}"
+
+                    response = requests.get(btn_url)
+
+                    if response.status_code == 200:
+                        data = response.json()
+                        if data:
+                            if 'error' in data:
+                                print("error")
+                            else:
+                                info = data[0]
+                                usages = info.get('usages')
+                                for usage in usages:
+                                    language = usage["usage_full"]
+                                    languages.add(language)
+                    time.sleep(1)
+
+                for language in languages:
+                    transcriptions.add(get_phonetic_transcription(full_name, language)["phonetic_transcription"])
+
+                result = {"First":row["First"], "Last":row["Last"], "Country":list(languages), "Translation":list(transcriptions)}
+            else:
+                result = {"First":row["First"], "Last":row["Last"], "Country":[row["Country"]], "Translation":[get_phonetic_transcription(full_name, row["Country"])["phonetic_transcription"]]}
+                    
+            print(result)
             results.append(result)
 
         return JSONResponse(content=results)

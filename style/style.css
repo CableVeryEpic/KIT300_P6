@@ -14,8 +14,15 @@ header{
     padding-bottom: 10px;
 }
 
-main{
+main {
     margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#csv-section, #manual-section {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -51,6 +58,10 @@ input {
     background-color: #6888be;
 }
 
+input{
+    margin: 10px;
+}
+
 table{
     width: max-content;
     border-style: none;
@@ -71,14 +82,7 @@ thead{
     color: #363636;
 }
 
-th.name-col{
-    text-align: left;
-    padding-left: 15px;
-}
-
-td.name-col{
-    border-right-style: solid;
-    border-color: #c0c0c0;
+.first-col, .last-col{
     text-align: left;
     font-weight: bold;
     margin-top: 0px;
@@ -87,6 +91,11 @@ td.name-col{
     padding-bottom: 0px;
     padding-right: 120px;
     padding-left: 15px;
+}
+
+td.last-col{
+    border-right-style: solid;
+    border-color: #c0c0c0;
 }
 
 .country-col, .phonetics-col, .audio-col{

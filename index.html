@@ -12,13 +12,52 @@
         <h1>Name Phonetics Generator</h1>
     </header>
     <main>
-        <p id="description">Name Phonetics Generator will produce International Phonetic Alphabet of names given and their audio representation. Upload a csv file below. (your csv file needs to contain names and their country of origin only)</p>
-        <label for="input">Upload a csv file</label>
-        <input type="file" id="input" name="input" accept=".csv, .xls, .xlsx" required>
-        <button class="btn" onclick="upload()">GENERATE</button>
+        <p>Choose your input type below ↓</p>
+        <div class="input-toggle">
+            <label>
+                <input type="radio" name="inputType" value="csv" checked onchange="toggleInput('csv')"> Upload CSV
+            </label>
+            <label>
+                <input type="radio" name="inputType" value="manual" onchange="toggleInput('manual')"> Manual Input
+            </label>
+        </div>
+    
+        <!-- CSV Upload Section -->
+        <div id="csv-section">
+            <p id="description">Name Phonetics Generator will produce International Phonetic Alphabet of names given and their audio representation. Upload a csv file below. (your csv file needs to contain names and their country of origin only)</p>
+            <label for="input">Choose CSV file</label>
+            <input type="file" id="input" name="input" accept=".csv, .xls, .xlsx">
+            <button class="btn" onclick="upload()">GENERATE</button>
+        </div>
+    
+        <!-- Manual Input Section -->
+        <div id="manual-section" style="display: none;">
+            <p id="manual-description">Name Phonetics Generator will produce International Phonetic Alphabet of names given and their audio representation. Enter a first name, last name and its country of origin.</p>
+            <label for="manual-first">First Name:</label>
+            <input type="text" id="manual-fisrt" placeholder="e.g. Matt"><br>
+            <label for="manual-last">Last Name:</label>
+            <input type="text" id="manual-last" placeholder="e.g. King"><br>
+            <label for="manual-country">Country:</label>
+            <input type="text" id="manual-country" placeholder="e.g. Australia"><br>
+            <button class="btn" onclick="submitManual()">GENERATE</button>
+        </div>
     </main>
     <footer>name phonetics generator</footer>
     <script>
+
+        function toggleInput(type) {
+            document.getElementById("csv-section").style.display = type === 'csv' ? 'flex' : 'none';
+            document.getElementById("manual-section").style.display = type === 'manual' ? 'flex' : 'none';
+        }
+        
+        async function generateContent() {
+
+        }
+
+        async function saveToCSV() {
+
+        }
+
         async function upload() {
             const fileInput = document.getElementById("input");
             const file = fileInput.files[0];
@@ -34,6 +73,21 @@
                 alert("Error: " + err.message);
             }
         }
+
+        async function submitManual() {
+        const first = document.getElementById("manual-first").value.trim();
+        const last = document.getElementById("manual-last").value.trim();
+        const country = document.getElementById("manual-country").value.trim();
+
+        if (!first || !last || !country) {
+            alert("Please enter first name, last name and country of origin.");
+            return;
+        }
+
+        const singleData = [{ First: first, Last: last, Country: country }];
+        sessionStorage.setItem("transcriptionData", JSON.stringify(singleData));
+        window.location.href = "generate.html";
+    }
     </script>
 </body>
 </html>
