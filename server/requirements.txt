@@ -41,3 +41,5 @@ unicodecsv==0.14.1
 urllib3==2.3.0
 uvicorn 
 wheel==0.45.1
+boto3
+dotenv

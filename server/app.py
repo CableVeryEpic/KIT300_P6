@@ -1,30 +1,23 @@
 import datetime
 import os
-import sys
 import time
 import uuid
+from io import StringIO
 import epitran
 import pykakasi
 import requests
-import subprocess
-from dotenv import load_dotenv
 from indic_transliteration.sanscript import transliterate, ITRANS, DEVANAGARI
 # from sinlingua.singlish.rulebased_transliterator import RuleBasedTransliterator
 from fastapi import FastAPI, File, UploadFile, Body
 from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from io import StringIO
 import nltk
 from nltk.corpus import cmudict
 import pandas as pd
-import numpy as np
 from pydantic import BaseModel
-import pyopenjtalk
-import gruut_ipa
 import boto3
 
 BTN_API_KEY = "ca828435848"
-
 
 app = FastAPI()
 # Add CORS middleware
