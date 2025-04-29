@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Midori Sugie, Caleb Wittmer">
     <title>Name Phonetics Generator</title>
-    <script src="/static/main.js"></script>
 </head>
 <body>
     <header>
@@ -16,10 +15,10 @@
         <p>Choose your input type below ↓</p>
         <div class="input-toggle">
             <label>
-                <input type="radio" name="inputType" value="csv" checked onchange="toggleInput('csv')"> Upload CSV
+                <input type="radio" name="inputType" value="csv" checked> Upload CSV
             </label>
             <label>
-                <input type="radio" name="inputType" value="manual" onchange="toggleInput('manual')"> Manual Input
+                <input type="radio" name="inputType" value="manual"> Manual Input
             </label>
         </div>
     
@@ -28,7 +27,7 @@
             <p id="description">Name Phonetics Generator will produce International Phonetic Alphabet of names given and their audio representation. Upload a csv file below. (your csv file needs to contain names and their country of origin only)</p>
             <label for="input">Choose CSV file</label>
             <input type="file" id="input" name="input" accept=".csv, .xls, .xlsx">
-            <button class="btn" onclick="uploadFile()">GENERATE</button>
+            <button class="btn" id="fileUploadBtn">GENERATE</button>
         </div>
     
         <!-- Manual Input Section -->
@@ -40,9 +39,10 @@
             <input type="text" id="manual-last" placeholder="e.g. King"><br>
             <label for="manual-country">Country:</label>
             <input type="text" id="manual-country" placeholder="e.g. Australia"><br>
-            <button class="btn" onclick="transcribeSingle()">GENERATE</button>
+            <button class="btn" id="singleUploadBtn">GENERATE</button>
         </div>
     </main>
     <footer>name phonetics generator</footer>
+    <script src="/static/main.js"></script>
 </body>
 </html>

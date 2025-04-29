@@ -72,6 +72,26 @@ function toggleInput(type) {
     document.getElementById("manual-section").style.display = type === 'manual' ? 'flex' : 'none';
 }
 
-window.uploadFile = uploadFile
-window.transcribeSingle = transcribeSingle
-window.toggleInput = toggleInput
+document.addEventListener("DOMContentLoaded", () => {
+    const csvRadio = document.querySelector('input[value="csv"]');
+    const manualRadio = document.querySelector('input[value="manual"]');
+
+    const uploadButton = document.querySelector('#fileUploadBtn');
+    const manualButton = document.querySelector('#singleUploadBtn');
+
+    if (csvRadio) {
+        csvRadio.addEventListener("change", () => toggleInput('csv'));
+    }
+
+    if (manualRadio) {
+        manualRadio.addEventListener("change", () => toggleInput('manual'));
+    }
+
+    if (uploadButton) {
+        uploadButton.addEventListener("click", uploadFile);
+    }
+
+    if (manualButton) {
+        manualButton.addEventListener("click", transcribeSingle);
+    }
+})
