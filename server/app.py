@@ -24,6 +24,10 @@ BTN_API_KEY = "ca828435848"
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+audio_path = os.path.join(os.path.dirname(__file__), "audio")
+os.makedirs(audio_path, exist_ok=True)
+
 app.mount("/audio", StaticFiles(directory="server/audio"), name="audio")
 
 # Add CORS middleware
