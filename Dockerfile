@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Start from a small official Python image
-FROM python:3.10-slim
+FROM python:3.10
 
 # Set working directory
 WORKDIR /app
