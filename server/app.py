@@ -427,15 +427,32 @@ def get_hindi_phonetic(name: str) -> str:
 #     sinhala = transliterator.transliterator(name)
 #     return get_epitran_phonetic(sinhala, 'sin-Sinh')
 
+
+def insert_syllable_breaks(ipa: str) -> str:
+    """Insert syllable breaks into an IPA transcription."""
+    vowels = "aeiouɛəʌɔɑɪʊœø"
+    result = []
+    buffer = ""
+
+    for char in ipa:
+        buffer += char
+        if char in vowels:
+            result.append(buffer)
+            result.append(" / ")
+            buffer = ""
+    if buffer:
+        result.append(buffer)
+    return "".join(result).rstrip(" /")
+
+
 def get_epitran_phonetic(name: str, language_code: str) -> str:
-    """Get phonetic transcription using epitran for the given language code."""
+    """Get phonetic transcription using epitran for the given language code, with syllable breaks inserted."""
     try:
         epi = epitran.Epitran(language_code)
-        return epi.transliterate(name)
+        ipa = epi.transliterate(name)
+        return insert_syllable_breaks(ipa)
     except (FileNotFoundError, UnicodeDecodeError) as e:
-        return (
-            f"Phonetic transcription not supported for language code: {language_code}: {str(e)}"
-        )
+        return f"Phonetic transcription not supported for language code: {language_code}: {str(e)}"
 
 
 def get_phonetic_transcription(name: str, country: str):
