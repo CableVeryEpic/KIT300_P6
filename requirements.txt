@@ -23,7 +23,6 @@ pykakasi
 indic_transliteration
 pydantic 
 pydantic_core
-pyopenjtalk==0.4.0
 python-dateutil==2.9.0.post0
 python-multipart==0.0.20
 pytz==2025.1
