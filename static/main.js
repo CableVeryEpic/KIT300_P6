@@ -23,7 +23,7 @@ async function uploadFile() {
   
         const data = await response.json();
         sessionStorage.setItem("transcriptionData", JSON.stringify(data))
-        window.location.href = "generate.html";
+        window.location.href = "/generate.html";
     } catch (err) {
         alert("Error: " + err.message);
     }
@@ -61,7 +61,7 @@ async function transcribeSingle() {
 
         const data = await response.json();
         sessionStorage.setItem("transcriptionData", JSON.stringify(data))
-        window.location.href = "generate.html";
+        window.location.href = "/generate.html";
     } catch (err) {
         alert("Error: " + err.message);
     }

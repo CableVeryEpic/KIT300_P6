@@ -352,6 +352,10 @@ class NameRequest(BaseModel):
 async def root():
     return FileResponse("static/index.html")
 
+@app.get("/generate.html")
+async def serve_generate():
+    return FileResponse("static/generate.html", media_type="text/html")
+
 @app.get("/supported-countries")
 def get_supported_countries():
     """Returns a list of supported countries."""
