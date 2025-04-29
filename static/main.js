@@ -29,7 +29,7 @@ async function uploadFile() {
     }
 }
 
-async function transcribeSingle(first, last, country) {
+async function transcribeSingle() {
     const first = document.getElementById("manual-first").value.trim();
     const last = document.getElementById("manual-last").value.trim();
     const country = document.getElementById("manual-country").value.trim();
