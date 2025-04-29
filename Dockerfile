@@ -1,27 +1,20 @@
 # syntax = docker/dockerfile:1
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.18.0
-FROM node:${NODE_VERSION}-slim AS base
+# Start from a small official Python image
+FROM python:3.10-slim
 
-# Node.js app lives here
+# Set working directory
 WORKDIR /app
 
-# Set production environment
-ENV NODE_ENV="production"
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-
-# Throw-away build stage to reduce size of final image
-FROM base AS build
-
-# Copy application code
+# Copy rest of the app (backend and frontend)
 COPY . .
 
-# Final stage for app image
-FROM base
+# Expose the port
+EXPOSE 8080
 
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
+# Run FastAPI using Uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
