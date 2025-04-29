@@ -1,5 +1,6 @@
 import datetime
 import os
+from pathlib import Path
 import sys
 import time
 import uuid
@@ -8,6 +9,7 @@ import epitran
 import pykakasi
 import requests
 from indic_transliteration.sanscript import transliterate, ITRANS, DEVANAGARI
+
 # from sinlingua.singlish.rulebased_transliterator import RuleBasedTransliterator
 from fastapi import FastAPI, File, UploadFile, Body
 from fastapi.staticfiles import StaticFiles
@@ -19,37 +21,66 @@ import pandas as pd
 from pydantic import BaseModel
 import boto3
 
-BTN_API_KEY = "ca828435848"
-
+# Base setup
 app = FastAPI()
+BASE_DIR = Path(__file__).resolve().parent
+AUDIO_DIR = BASE_DIR / ("audio")
+AUDIO_DIR.mkdir(exist_ok=True)
+app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-audio_path = os.path.join(os.path.dirname(__file__), "audio")
-os.makedirs(audio_path, exist_ok=True)
-
-app.mount("/audio", StaticFiles(directory="server/audio"), name="audio")
-
-# Add CORS middleware
+# CORS setup
 origins = [
-    "http://localhost:3000",  # Allow local development
-    "*",  # Allow local development
-    "https://phonetics-client.vercel.app",  # Allow your production frontend
-    "https://*.vercel.app",  # Allow all Vercel deployments (optional)
+    "http://localhost:3000",
+    "*",
+    "https://phonetics-client.vercel.app",
+    "https://*.vercel.app",
 ]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-
-# Downloading CMU Pronouncing Dictionary
+# Transcription handlers
 nltk.download("cmudict")
+from nltk.corpus import cmudict
+
 pron_dict = cmudict.dict()
+
+BTN_API_KEY = "ca828435848"
+
+# # app.mount("/audio", StaticFiles(directory="audio"), name="audio")
+# BASE_DIR = Path(__file__).resolve().parent
+# STATIC_DIR = BASE_DIR / "static"
+# AUDIO_DIR = BASE_DIR / "audio"
+
+# AUDIO_DIR.mkdir(exist_ok=True)
+# # ------------------------------------------------------------------
+# app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+# app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
+
+# # Add CORS middleware
+# origins = [
+#     "http://localhost:3000",  # Allow local development
+#     "*",  # Allow local development
+#     "https://phonetics-client.vercel.app",  # Allow your production frontend
+#     "https://*.vercel.app",  # Allow all Vercel deployments (optional)
+# ]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],  # Allow all methods
+#     allow_headers=["*"],  # Allow all headers
+# )
+
+
+# # Downloading CMU Pronouncing Dictionary
+# nltk.download("cmudict")
+# pron_dict = cmudict.dict()
 
 # Country to Language Mapping
 COUNTRY_LANGUAGE_MAP = {
@@ -405,27 +436,23 @@ def get_english_phonetic(name: str) -> str:
 
 
 def get_japanese_phonetic(name: str) -> str:
-    """Get phonetic transcription for Japanese using kakasi transliteration then epitran."""
+    """Get phonetic transcription for Japanese using kakasi transliteration."""
     kakasi = pykakasi.kakasi()
-    kakasi.setMode("H", "H")  # Hiragana
-    kakasi.setMode("K", "H")  # Katakana to Hiragana
-    kakasi.setMode("J", "H")  # Kanji to Hiragana
-    kakasi.setMode("r", "Hepburn")  # Use Hepburn romaji if needed
+    # Set conversion rules
+    kakasi.setMode("H", "a")  # Hiragana to ascii
+    kakasi.setMode("K", "a")  # Katakana to ascii
+    kakasi.setMode("J", "a")  # Kanji to ascii
+    kakasi.setMode("r", "Hepburn")  # Romanization
 
     converter = kakasi.getConverter()
-    hira = converter.do(name)
-    return get_epitran_phonetic(hira, 'jpn-Hrgn')
+    romaji = converter.do(name)
+    return get_epitran_phonetic(romaji, "jpn-Hrgn")
+
 
 def get_hindi_phonetic(name: str) -> str:
     """Get phonetic transcription for hindi using transliteration then epitran"""
     devanagari = transliterate(name, ITRANS, DEVANAGARI)
     return get_epitran_phonetic(devanagari, 'hin-Deva')
-
-# def get_sinhala_phonetic(name: str) -> str:
-#     """Get phonetic transcription for hindi using sinlingua then epitran"""
-#     transliterator = RuleBasedTransliterator()
-#     sinhala = transliterator.transliterator(name)
-#     return get_epitran_phonetic(sinhala, 'sin-Sinh')
 
 
 def insert_syllable_breaks(ipa: str) -> str:
@@ -435,14 +462,18 @@ def insert_syllable_breaks(ipa: str) -> str:
     buffer = ""
 
     for char in ipa:
+        # Skip periods in IPA strings
+        if char == ".":
+            continue
+
         buffer += char
         if char in vowels:
             result.append(buffer)
-            result.append(".")
+            result.append(" / ")
             buffer = ""
     if buffer:
         result.append(buffer)
-    return "".join(result).rstrip(".")
+    return "".join(result).rstrip(" /")
 
 
 def get_epitran_phonetic(name: str, language_code: str) -> str:
@@ -453,7 +484,6 @@ def get_epitran_phonetic(name: str, language_code: str) -> str:
         return insert_syllable_breaks(ipa)
     except (FileNotFoundError, UnicodeDecodeError) as e:
         return f"Phonetic transcription not supported for language code: {language_code}: {str(e)}"
-
 
 
 def get_phonetic_transcription(name: str, country: str):
