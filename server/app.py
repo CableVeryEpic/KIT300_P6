@@ -455,35 +455,32 @@ def get_epitran_phonetic(name: str, language_code: str) -> str:
         return f"Phonetic transcription not supported for language code: {language_code}: {str(e)}"
 
 
+
 def get_phonetic_transcription(name: str, country: str):
     """Returns phonetic transcription and generates audio file."""
-    country = country.lower()
-
-    language = ""
-    if country in COUNTRY_LANGUAGE_MAP:
-        language = COUNTRY_LANGUAGE_MAP[country]
-    elif country in COUNTRY_LANGUAGE_MAP.values():
-        language = country
-    else:
+    if not country:
         return {
             "name": name,
-            "phonetic_transcription": "Country not supported",
-            "audio_file": "",  # Return only the filename
+            "phonetic_transcription": "Country not provided",
+            "audio_file": "",
         }
 
-    # Generating a unique filename
-    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")  # Current timestamp
-    unique_id = uuid.uuid4().hex[:6]  # Random unique identifier
-    audio_filename = f"{name}{country}{timestamp}_{unique_id}.mp3"
+    country = country.lower()
 
-    # Language-specific handlers
+    language = COUNTRY_LANGUAGE_MAP.get(country, country)
+
+    # Make name safe for filenames
+    safe_name = "".join(c if c.isalnum() else "_" for c in name)
+
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    unique_id = uuid.uuid4().hex[:6]
+    audio_filename = f"{safe_name}{country}{timestamp}_{unique_id}.mp3"
+
     language_handlers = {
-        #"english": get_english_phonetic,
         "japanese": get_japanese_phonetic,
         "hindi": get_hindi_phonetic,
     }
 
-    # Get phonetic transcription
     if language in language_handlers:
         phonetic = language_handlers[language](name)
     elif language in LANGUAGE_MAP:
@@ -494,26 +491,26 @@ def get_phonetic_transcription(name: str, country: str):
     polly = boto3.client(
         "polly",
         region_name="ap-southeast-2",
-        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
-        )
-
-    ssml_input = f"""<speak><phoneme alphabet="ipa" ph="{phonetic}">{name}</phoneme></speak>"""
-    
-    response = polly.synthesize_speech(
-        TextType="ssml",
-        Text=ssml_input,
-        OutputFormat="mp3",
-        VoiceId="Joanna"
+        aws_access_key_id="AKIA5HYQQGJHE2F5FSV4",
+        aws_secret_access_key="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",
     )
-    with open("server/audio/" + audio_filename, "wb") as f:
+
+    ssml_input = (
+        f"""<speak><phoneme alphabet="ipa" ph="{phonetic}">{name}</phoneme></speak>"""
+    )
+    response = polly.synthesize_speech(
+        TextType="ssml", Text=ssml_input, OutputFormat="mp3", VoiceId="Joanna"
+    )
+
+    with open(AUDIO_DIR / audio_filename, "wb") as f:
         f.write(response["AudioStream"].read())
 
     return {
         "name": name,
         "phonetic_transcription": phonetic,
-        "audio_file": audio_filename,  # Return only the filename
+        "audio_file": audio_filename,
     }
+
 
 @app.post("/transcription")
 async def transcription(data: dict = Body(...)):
