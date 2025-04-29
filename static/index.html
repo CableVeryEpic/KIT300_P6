@@ -27,7 +27,7 @@
             <p id="description">Name Phonetics Generator will produce International Phonetic Alphabet of names given and their audio representation. Upload a csv file below. (your csv file needs to contain names and their country of origin only)</p>
             <label for="input">Choose CSV file</label>
             <input type="file" id="input" name="input" accept=".csv, .xls, .xlsx">
-            <button class="btn" onclick="upload()">GENERATE</button>
+            <button class="btn" onclick="uploadFile()">GENERATE</button>
         </div>
     
         <!-- Manual Input Section -->
@@ -39,7 +39,7 @@
             <input type="text" id="manual-last" placeholder="e.g. King"><br>
             <label for="manual-country">Country:</label>
             <input type="text" id="manual-country" placeholder="e.g. Australia"><br>
-            <button class="btn" onclick="submitManual()">GENERATE</button>
+            <button class="btn" onclick="transcribeSingle()">GENERATE</button>
         </div>
     </main>
     <footer>name phonetics generator</footer>

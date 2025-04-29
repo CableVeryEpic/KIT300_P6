@@ -71,3 +71,7 @@ function toggleInput(type) {
     document.getElementById("csv-section").style.display = type === 'csv' ? 'flex' : 'none';
     document.getElementById("manual-section").style.display = type === 'manual' ? 'flex' : 'none';
 }
+
+window.uploadFile = uploadFile
+window.transcribeSingle = transcribeSingle
+window.toggleInput = toggleInput
