@@ -1,4 +1,4 @@
-async function uploadFile(file) {
+async function uploadFile() {
     const fileInput = document.getElementById("input");
     const file = fileInput.files[0];
 
@@ -72,26 +72,24 @@ function toggleInput(type) {
     document.getElementById("manual-section").style.display = type === 'manual' ? 'flex' : 'none';
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const csvRadio = document.querySelector('input[value="csv"]');
-    const manualRadio = document.querySelector('input[value="manual"]');
+const csvRadio = document.querySelector('input[value="csv"]');
+const manualRadio = document.querySelector('input[value="manual"]');
 
-    const uploadButton = document.querySelector('#fileUploadBtn');
-    const manualButton = document.querySelector('#singleUploadBtn');
+const uploadButton = document.querySelector('#fileUploadBtn');
+const manualButton = document.querySelector('#singleUploadBtn');
 
-    if (csvRadio) {
-        csvRadio.addEventListener("change", () => toggleInput('csv'));
-    }
+if (csvRadio) {
+    csvRadio.addEventListener("change", () => toggleInput('csv'));
+}
 
-    if (manualRadio) {
-        manualRadio.addEventListener("change", () => toggleInput('manual'));
-    }
+if (manualRadio) {
+    manualRadio.addEventListener("change", () => toggleInput('manual'));
+}
 
-    if (uploadButton) {
-        uploadButton.addEventListener("click", uploadFile);
-    }
+if (uploadButton) {
+    uploadButton.addEventListener("click", uploadFile);
+}
 
-    if (manualButton) {
-        manualButton.addEventListener("click", transcribeSingle);
-    }
-})
+if (manualButton) {
+    manualButton.addEventListener("click", transcribeSingle);
+}
