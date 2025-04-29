@@ -40,6 +40,6 @@ tzdata==2025.1
 unicodecsv==0.14.1
 urllib3==2.3.0
 uvicorn 
-wheel==0.45.1
+wheel
 boto3
 dotenv
