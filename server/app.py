@@ -438,11 +438,11 @@ def insert_syllable_breaks(ipa: str) -> str:
         buffer += char
         if char in vowels:
             result.append(buffer)
-            result.append(" / ")
+            result.append(".")
             buffer = ""
     if buffer:
         result.append(buffer)
-    return "".join(result).rstrip(" /")
+    return "".join(result).rstrip(".")
 
 
 def get_epitran_phonetic(name: str, language_code: str) -> str:
