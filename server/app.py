@@ -10,7 +10,8 @@ import requests
 from indic_transliteration.sanscript import transliterate, ITRANS, DEVANAGARI
 # from sinlingua.singlish.rulebased_transliterator import RuleBasedTransliterator
 from fastapi import FastAPI, File, UploadFile, Body
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import nltk
 from nltk.corpus import cmudict
@@ -21,6 +22,9 @@ import boto3
 BTN_API_KEY = "ca828435848"
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # Add CORS middleware
 origins = [
     "http://localhost:3000",  # Allow local development
@@ -344,9 +348,9 @@ class NameRequest(BaseModel):
     name: str
     country: str
 
-@app.get("/", include_in_schema=False)
-def root():
-    return RedirectResponse(url="/docs")
+@app.get("/")
+async def root():
+    return FileResponse("static/index.html")
 
 @app.get("/supported-countries")
 def get_supported_countries():
