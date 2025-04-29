@@ -30,7 +30,7 @@
                 </tbody>
             </table>
 
-            <a href="index.html" class="upload btn">upload a different csv file</a>
+            <a href="/index.html" class="upload btn">upload a different csv file</a>
         </main>
         <footer>name phonetics generator</footer>
         <script>
@@ -84,7 +84,7 @@
                     result.Filename.forEach(file => {
                         let audioItem = document.createElement("li");
                         audioItem.innerHTML = `<audio controls>
-                                            <source src="./server/${file}" type="audio/mpeg">
+                                            <source src="/audio/${file}" type="audio/mpeg">
                                             Your browser does not support the audio element.
                                             </audio>`;
                         audioList.appendChild(audioItem);

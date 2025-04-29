@@ -24,6 +24,7 @@ BTN_API_KEY = "ca828435848"
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/audio", StaticFiles(directory="server/audio"), name="audio")
 
 # Add CORS middleware
 origins = [
@@ -45,10 +46,6 @@ app.add_middleware(
 # Downloading CMU Pronouncing Dictionary
 nltk.download("cmudict")
 pron_dict = cmudict.dict()
-
-# Creating the audio directory if it doesn't exist
-AUDIO_DIR = "audio"
-os.makedirs(AUDIO_DIR, exist_ok=True)
 
 # Country to Language Mapping
 COUNTRY_LANGUAGE_MAP = {
@@ -422,7 +419,6 @@ def get_phonetic_transcription(name: str, country: str):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")  # Current timestamp
     unique_id = uuid.uuid4().hex[:6]  # Random unique identifier
     audio_filename = f"{name}{country}{timestamp}_{unique_id}.mp3"
-    audio_file = f"{AUDIO_DIR}/{audio_filename}"
 
     # Language-specific handlers
     language_handlers = {
@@ -454,13 +450,13 @@ def get_phonetic_transcription(name: str, country: str):
         OutputFormat="mp3",
         VoiceId="Joanna"
     )
-    with open(audio_file, "wb") as f:
+    with open("server/audio/" + audio_filename, "wb") as f:
         f.write(response["AudioStream"].read())
 
     return {
         "name": name,
         "phonetic_transcription": phonetic,
-        "audio_file": audio_file,  # Return only the filename
+        "audio_file": audio_filename,  # Return only the filename
     }
 
 @app.post("/transcription")
