@@ -43,53 +43,6 @@
         </div>
     </main>
     <footer>name phonetics generator</footer>
-    <script>
-
-        function toggleInput(type) {
-            document.getElementById("csv-section").style.display = type === 'csv' ? 'flex' : 'none';
-            document.getElementById("manual-section").style.display = type === 'manual' ? 'flex' : 'none';
-        }
-        
-        async function generateContent() {
-
-        }
-
-        async function saveToCSV() {
-
-        }
-
-        async function upload() {
-            const fileInput = document.getElementById("input");
-            const file = fileInput.files[0];
-
-            if (!file) {
-              alert("Please select a file first.");
-              return;
-            }
-
-            try {
-                await window.electronAPI.uploadFile(file);
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
-        }
-
-        async function submitManual() {
-        const first = document.getElementById("manual-first").value.trim();
-        const last = document.getElementById("manual-last").value.trim();
-        const country = document.getElementById("manual-country").value.trim();
-
-        if (!first || !last) {
-            alert("Please enter first name, last name and optionally country of origin.");
-            return;
-        }
-
-        try {
-            await window.electronAPI.transcribeSingle(first, last, country)
-        } catch (err) {
-            alert("Error: " + err.message);
-        }
-    }
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>

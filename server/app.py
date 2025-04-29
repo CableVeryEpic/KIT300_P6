@@ -1,8 +1,9 @@
 import datetime
 import os
+import sys
 import time
 import uuid
-from io import StringIO
+from io import StringIO, BytesIO
 import epitran
 import pykakasi
 import requests
@@ -40,7 +41,6 @@ app.add_middleware(
 # Downloading CMU Pronouncing Dictionary
 nltk.download("cmudict")
 pron_dict = cmudict.dict()
-epitran.download.cedict()
 
 # Creating the audio directory if it doesn't exist
 AUDIO_DIR = "audio"
@@ -388,9 +388,9 @@ def get_epitran_phonetic(name: str, language_code: str) -> str:
     try:
         epi = epitran.Epitran(language_code)
         return epi.transliterate(name)
-    except FileNotFoundError:
+    except (FileNotFoundError, UnicodeDecodeError) as e:
         return (
-            f"Phonetic transcription not supported for language code: {language_code}."
+            f"Phonetic transcription not supported for language code: {language_code}: {str(e)}"
         )
 
 
@@ -431,8 +431,6 @@ def get_phonetic_transcription(name: str, country: str):
     else:
         phonetic = f"Language not supported: {language}."
 
-    print(phonetic)
-
     polly = boto3.Session(profile_name="cable").client("polly")
 
     ssml_input = f"""<speak><phoneme alphabet="ipa" ph="{phonetic}">{name}</phoneme></speak>"""
@@ -472,24 +470,49 @@ async def transcription(data: dict = Body(...)):
             transcriptions.append(transcriptionData["phonetic_transcription"])
             filenames.append(transcriptionData["audio_file"])
 
-        result = {"First":first, "Last":last, "Country":languages, "Translation":transcriptions, "Filename":filenames}
+        result = {"First":first, 
+                  "Last":last, 
+                  "Country":languages, 
+                  "Translation":transcriptions, 
+                  "Filename":filenames
+                  }
     else:
         transcriptionData = get_phonetic_transcription(full_name, country)
-        result = {"First":first, "Last":last, "Country":[country], "Translation":[transcriptionData["phonetic_transcription"]], "Filename":[transcriptionData["audio_file"]]}
-    
-    return [result]
+        result = {"First":first, 
+                  "Last":last, 
+                  "Country":[country], 
+                  "Translation":[transcriptionData["phonetic_transcription"]], 
+                  "Filename":[transcriptionData["audio_file"]]
+                  }
+
+    return JSONResponse(content=[result])
 
 @app.post("/batch-transcription")
 async def batch_transcription(file: UploadFile = File(...)):
     """Processes a batch file and returns transcriptions with audio."""
     try:
         # Read file
-        if file.filename.endswith(".csv"):
-            df = pd.read_csv(file.file)
-        elif file.filename.endswith(".xlsx"):
-            df = pd.read_excel(file.file)
+        filename = file.filename.lower()
+
+        # Read file content as bytes
+        contents = await file.read()
+
+        # Handle CSV
+        if filename.endswith(".csv"):
+            try:
+                text = contents.decode("utf-8")  # Force UTF-8 decoding
+            except UnicodeDecodeError as e:
+                return {"error": f"Failed to decode file as UTF-8: {str(e)}"}
+
+            df = pd.read_csv(StringIO(text))
+
+        # Handle Excel
+        elif filename.endswith(".xlsx") or filename.endswith(".xls"):
+            df = pd.read_excel(BytesIO(contents))
+
         else:
-            return {"error": "Unsupported file format. Use CSV or Excel."}
+            return {"error": "Unsupported file format. Use .csv or .xlsx"}
+
 
         if "First" not in df.columns or "Last" not in df.columns or "Country" not in df.columns:
             return {"error": "File must contain 'First', 'Last' and 'Country' columns."}
@@ -517,7 +540,6 @@ async def batch_transcription(file: UploadFile = File(...)):
                 transcriptionData = get_phonetic_transcription(full_name, row["Country"])
                 result = {"First":row["First"], "Last":row["Last"], "Country":[row["Country"]], "Translation":[transcriptionData["phonetic_transcription"]], "Filename":[transcriptionData["audio_file"]]}
                     
-            print(result)
             results.append(result)
 
         return JSONResponse(content=results)
