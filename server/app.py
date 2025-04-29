@@ -362,10 +362,45 @@ def get_supported_countries():
     """Returns a list of supported countries."""
     return list(COUNTRY_LANGUAGE_MAP.keys())
 
+
+def syllabify_english(phonemes: list[str]) -> str:
+    """Syllabify a list of phonemes for the English language."""
+    vowels = {
+        "AA",
+        "AE",
+        "AH",
+        "AO",
+        "AW",
+        "AY",
+        "EH",
+        "ER",
+        "EY",
+        "IH",
+        "IY",
+        "OW",
+        "OY",
+        "UH",
+        "UW",
+    }
+    syllables = []
+    current = []
+
+    for p in phonemes:
+        current.append(p)
+        if any(p.startswith(v) for v in vowels):
+            syllables.append("".join(current))
+            current = []
+
+    if current:
+        syllables[-1] += "".join(current)
+    return " / ".join(syllables)
+
+
 def get_english_phonetic(name: str) -> str:
     """Get phonetic transcription for English using CMU Pronouncing Dictionary."""
     if name.lower() in pron_dict:
-        return " ".join(pron_dict[name.lower()][0])
+        phonemes = pron_dict[name.lower()][0]
+        return syllabify_english(phonemes)
     return "Phonetic transcription not found in CMU dictionary."
 
 
