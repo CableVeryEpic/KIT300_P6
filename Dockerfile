@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     libssl-dev \
     libsndfile-dev \
+    flite \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies

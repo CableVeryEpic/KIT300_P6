@@ -27,6 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent
 AUDIO_DIR = BASE_DIR / ("audio")
 AUDIO_DIR.mkdir(exist_ok=True)
 app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # CORS setup
 origins = [
@@ -454,6 +455,11 @@ def get_hindi_phonetic(name: str) -> str:
     devanagari = transliterate(name, ITRANS, DEVANAGARI)
     return get_epitran_phonetic(devanagari, 'hin-Deva')
 
+# def get_sinhala_phonetic(name: str) -> str:
+#     """Get phonetic transcription for hindi using sinlingua then epitran"""
+#     transliterator = RuleBasedTransliterator()
+#     sinhala = transliterator.transliterator(name)
+#     return get_epitran_phonetic(sinhala, 'sin-Sinh')
 
 def insert_syllable_breaks(ipa: str) -> str:
     """Insert syllable breaks into an IPA transcription."""
@@ -469,11 +475,11 @@ def insert_syllable_breaks(ipa: str) -> str:
         buffer += char
         if char in vowels:
             result.append(buffer)
-            result.append(" / ")
+            result.append(".")
             buffer = ""
     if buffer:
         result.append(buffer)
-    return "".join(result).rstrip(" /")
+    return "".join(result).rstrip(".")
 
 
 def get_epitran_phonetic(name: str, language_code: str) -> str:
@@ -488,16 +494,20 @@ def get_epitran_phonetic(name: str, language_code: str) -> str:
 
 def get_phonetic_transcription(name: str, country: str):
     """Returns phonetic transcription and generates audio file."""
-    if not country:
-        return {
-            "name": name,
-            "phonetic_transcription": "Country not provided",
-            "audio_file": "",
-        }
 
     country = country.lower()
 
-    language = COUNTRY_LANGUAGE_MAP.get(country, country)
+    language = ""
+    if country in COUNTRY_LANGUAGE_MAP:
+        language = COUNTRY_LANGUAGE_MAP[country]
+    elif country in COUNTRY_LANGUAGE_MAP.values():
+        language = country
+    else:
+        return {
+            "name": name,
+            "phonetic_transcription": "Country not supported",
+            "audio_file": "",  # Return only the filename
+        }
 
     # Make name safe for filenames
     safe_name = "".join(c if c.isalnum() else "_" for c in name)
@@ -507,6 +517,7 @@ def get_phonetic_transcription(name: str, country: str):
     audio_filename = f"{safe_name}{country}{timestamp}_{unique_id}.mp3"
 
     language_handlers = {
+        #"english": get_english_phonetic,
         "japanese": get_japanese_phonetic,
         "hindi": get_hindi_phonetic,
     }
@@ -521,18 +532,20 @@ def get_phonetic_transcription(name: str, country: str):
     polly = boto3.client(
         "polly",
         region_name="ap-southeast-2",
-        aws_access_key_id="AKIA5HYQQGJHE2F5FSV4",
-        aws_secret_access_key="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",
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
     )
 
-    ssml_input = (
-        f"""<speak><phoneme alphabet="ipa" ph="{phonetic}">{name}</phoneme></speak>"""
-    )
+    ssml_input = f"""<speak><phoneme alphabet="ipa" ph="{phonetic}">{name}</phoneme></speak>"""
+
     response = polly.synthesize_speech(
-        TextType="ssml", Text=ssml_input, OutputFormat="mp3", VoiceId="Joanna"
+        TextType="ssml",
+        Text=ssml_input,
+        OutputFormat="mp3",
+        VoiceId="Joanna"
     )
 
-    with open(AUDIO_DIR / audio_filename, "wb") as f:
+    with open("server/audio/" + audio_filename, "wb") as f:
         f.write(response["AudioStream"].read())
 
     return {
@@ -627,10 +640,20 @@ async def batch_transcription(file: UploadFile = File(...)):
                     transcriptions.append(transcriptionData["phonetic_transcription"])
                     filenames.append(transcriptionData["audio_file"])
 
-                result = {"First":row["First"], "Last":row["Last"], "Country":languages, "Translation":transcriptions, "Filename":filenames}
+                result = {"First":row["First"],
+                          "Last":row["Last"],
+                          "Country":languages,
+                          "Translation":transcriptions,
+                          "Filename":filenames
+                          }
             else:
                 transcriptionData = get_phonetic_transcription(full_name, row["Country"])
-                result = {"First":row["First"], "Last":row["Last"], "Country":[row["Country"]], "Translation":[transcriptionData["phonetic_transcription"]], "Filename":[transcriptionData["audio_file"]]}
+                result = {"First":row["First"],
+                          "Last":row["Last"],
+                          "Country":[row["Country"]],
+                          "Translation":[transcriptionData["phonetic_transcription"]],
+                          "Filename":[transcriptionData["audio_file"]]
+                          }
                     
             results.append(result)
 
