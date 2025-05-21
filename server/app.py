@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 import time
 import uuid
+from dotenv import load_dotenv
 from io import StringIO, BytesIO
 import epitran
 import pykakasi
@@ -26,15 +27,16 @@ app = FastAPI()
 BASE_DIR = Path(__file__).resolve().parent
 AUDIO_DIR = BASE_DIR / ("audio")
 AUDIO_DIR.mkdir(exist_ok=True)
+STATIC_DIR = BASE_DIR.parent / ("static")
 app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # CORS setup
 origins = [
-    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
     "*",
-    "https://phonetics-client.vercel.app",
-    "https://*.vercel.app",
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -50,6 +52,7 @@ from nltk.corpus import cmudict
 
 pron_dict = cmudict.dict()
 
+load_dotenv()
 BTN_API_KEY = "ca828435848"
 
 # # app.mount("/audio", StaticFiles(directory="audio"), name="audio")

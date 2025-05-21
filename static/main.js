@@ -1,3 +1,11 @@
+localDevelopment = true
+URLStart = ""
+if (localDevelopment) {
+    URLStart = "http://localhost:8000"
+} else {
+    URLStart = "https://kit300-p6.fly.dev"
+}
+
 async function uploadFile() {
     const fileInput = document.getElementById("input");
     const file = fileInput.files[0];
@@ -11,7 +19,9 @@ async function uploadFile() {
         const formData = new FormData();
         formData.append("file", file);
 
-        const response = await fetch("https://kit300-p6.fly.dev/batch-transcription", {
+        console.log("Fetching transcription...");
+
+        const response = await fetch(URLStart + "/batch-transcription", {
         method: "POST",
         body: formData,
         });
@@ -21,8 +31,11 @@ async function uploadFile() {
             throw new Error(`Failed: ${errorText}`);
         }
   
+        console.log("Awaiting Data...");
         const data = await response.json();
+        console.log("Setting Data...");
         sessionStorage.setItem("transcriptionData", JSON.stringify(data))
+        console.log("Redirecting...");
         window.location.href = "/generate.html";
     } catch (err) {
         alert("Error: " + err.message);
@@ -46,7 +59,7 @@ async function transcribeSingle() {
             Country: country
         };
 
-        const response = await fetch('https://kit300-p6.fly.dev/transcription', {
+        const response = await fetch(URLStart + '/transcription', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -61,7 +74,7 @@ async function transcribeSingle() {
 
         const data = await response.json();
         sessionStorage.setItem("transcriptionData", JSON.stringify(data))
-        window.location.href = "/generate.html";
+        window.location.href = "generate.html";
     } catch (err) {
         alert("Error: " + err.message);
     }
