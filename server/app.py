@@ -539,13 +539,13 @@ def get_phonetic_transcription(name: str, country: str):
         aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
     )
 
-    ssml_input = f"""<speak><phoneme alphabet="ipa" ph="{phonetic}">{name}</phoneme></speak>"""
+    ssml_input = f"""<speak><prosody rate="slow"><phoneme alphabet="ipa" ph="{phonetic}">{name}</phoneme></prosody></speak>"""
 
     response = polly.synthesize_speech(
         TextType="ssml",
         Text=ssml_input,
         OutputFormat="mp3",
-        VoiceId="Joanna"
+        VoiceId="Nicole"
     )
 
     with open("server/audio/" + audio_filename, "wb") as f:

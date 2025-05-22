@@ -22,23 +22,14 @@ main {
     align-items: center;
 }
 
-#csv-section, #manual-section {
+#csv-section {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-#description{
-    padding-bottom: 10px;
-    text-align: center;
-}
-
-input {
-    margin-left: 70px;
-}
-
-.btn{
+#csv-section label {
     background-color: #4470AD;
     color:#c0c0c0;
     text-decoration: none;
@@ -52,17 +43,130 @@ input {
     padding-left: 15px;
     padding-right: 15px;
     width: 150px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#csv-section label:hover {
+    background-color: #6888be;
+}
+
+#csv-section input {
+    display: none;
+}
+
+#manual-section {
+    display: flex;
+}
+
+#manual-section div {
+    display: flex;
+    flex-direction: column;
+}
+
+#manual-section label {
+    font-size: 12px;
+    padding-left: 3px;
+}
+
+#description {
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+input {
+    margin: 2px 2px 0 2px;
+}
+
+.btn {
+    background-color: #4470AD;
+    color:#c0c0c0;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 150px;
+    border-radius: 5px;
+}
+
+.chart-btn {
+    width: fit-content;
+    margin: 0;
+    padding: 5px;
 }
 
 .btn:hover{
     background-color: #6888be;
 }
 
-input{
-    margin: 10px;
+#ipa-chart {
+    position: fixed;
+    padding: 30px;
+    background-color: #cececef3;
 }
 
-table{
+#close-chart {
+    position: fixed;
+}
+
+#chart-container {
+    display: flex;
+}
+
+#ipa-chart table {
+    border-collapse: collapse;
+    margin: 1rem 0;
+    width: 100%;
+}
+#ipa-chart th, td {
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+    text-align: center;
+}
+
+#ipa-chart th {
+    background-color: #f0f0f0;
+}
+    
+#ipa-chart caption {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+    
+#ipa-chart .small {
+    font-size: 0.85em;
+    color: #666;
+}
+
+#ipa-chart button {
+    background: none;
+    border: none;
+    font-size: 1em;
+    cursor: pointer;
+    color: #0077cc;
+}
+
+#ipa-chart button:hover {
+    color: #0055aa;
+}
+
+.ipa-chart-secondaries {
+    display: flex;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+#phonetics-table {
+    margin-top: 10px;
+}
+
+table {
     width: max-content;
     border-style: none;
     border-width: 1.5px;
@@ -83,10 +187,19 @@ thead{
     font-weight: bold;
     margin-top: 0px;
     margin-bottom: 0px;
-    padding-top: 20px;
     padding-bottom: 0px;
     padding-right: 20px;
     padding-left: 15px;
+}
+
+.phonetics-col, .country-col {
+    text-align: left;
+    padding-right: 20px;
+    padding-left: 15px;
+}
+
+td {
+    vertical-align: middle;
 }
 
 td.last-col{
@@ -94,22 +207,8 @@ td.last-col{
     border-color: #c0c0c0;
 }
 
-td {
-    vertical-align: top;
-}
-
 li {
     list-style-type: none;
-}
-
-ul {
-    padding-inline-start: 10px;
-    margin-block-start: 0;
-    margin-block-end: 0;
-}
-
-.phonetics-col, .country-col {
-    padding-right: 20px;
 }
 
 .phonetics-col li, .country-col li {
@@ -117,10 +216,50 @@ ul {
     padding-bottom: 16px;
 }
 
+ul {
+    padding-inline-start: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
 
 footer{
     font-size: 15px;
     color: #555555;
     text-align: center;
     bottom: 0;
+}
+
+.off {
+    display: none;
+}
+
+#overlay-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #ccc;
+    border-top: 5px solid #333;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

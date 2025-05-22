@@ -1,103 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/static/style/style.css">
-        <meta charset="UTF-8">
-        <meta name="author" content="Midori Sugie">
-        <title>Name Phonetics Generator</title>
-    </head>
-    <body>
-        <header>
-            <h1>Name Phonetics Generator</h1>
-        </header>
-        <main>
-            <h2>Phonetics and Audio Representitve of names</h2>
 
-            <a href class="download btn">download a csv file</a>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/style/style.css">
+    <meta charset="UTF-8">
+    <meta name="author" content="Midori Sugie">
+    <title>Name Phonetics Generator</title>
+</head>
 
-            <table id="phonetics-table">
-                <thead>
-                    <tr id="features-row">
-                        <th class="first-col">First</th>
-                        <th class="last-col">Last</th>
-                        <th class="country-col">Country</th>
-                        <th class="phonetics-col">Phonetics</th>
-                        <th class="audio-col">Audio</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+<body>
+    <header>
+        <h1>Name Phonetics Generator</h1>
+    </header>
+    <main>
+        <button id="open-chart" class="btn chart-btn">Display IPA Chart</button>
+        <div id="ipa-chart" class="off">
+            <button id="close-chart">X</button>
+            <div id="chart-container">
+                <div class="ipa-chart-primaries">
+                    <table>
+                        <caption>Consonants (Pulmonic)</caption>
+                        <tr>
+                            <th>Place</th>
+                            <th>Bilabial</th>
+                            <th>Labiodental</th>
+                            <th>Dental</th>
+                            <th>Alveolar</th>
+                            <th>Postalveolar</th>
+                            <th>Palatal</th>
+                            <th>Velar</th>
+                            <th>Glottal</th>
+                        </tr>
+                        <tr>
+                            <td>Plosive</td>
+                            <td><button onclick="playSound('p')">p</button> <button onclick="playSound('b')">b</button>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td><button onclick="playSound('t')">t</button> <button onclick="playSound('d')">d</button>
+                            </td>
+                            <td></td>
+                            <td><button onclick="playSound('c')">c</button> <button onclick="playSound('ɟ')">ɟ</button>
+                            </td>
+                            <td><button onclick="playSound('k')">k</button> <button onclick="playSound('g')">g</button>
+                            </td>
+                            <td><button onclick="playSound('ʔ')">ʔ</button></td>
+                        </tr>
+                        <tr>
+                            <td>Nasal</td>
+                            <td><button onclick="playSound('m')">m</button></td>
+                            <td><button onclick="playSound('ɱ')">ɱ</button></td>
+                            <td><button onclick="playSound('n̪')">n̪</button></td>
+                            <td><button onclick="playSound('n')">n</button></td>
+                            <td></td>
+                            <td><button onclick="playSound('ɲ')">ɲ</button></td>
+                            <td><button onclick="playSound('ŋ')">ŋ</button></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Fricative</td>
+                            <td><button onclick="playSound('ɸ')">ɸ</button> <button onclick="playSound('β')">β</button>
+                            </td>
+                            <td><button onclick="playSound('f')">f</button> <button onclick="playSound('v')">v</button>
+                            </td>
+                            <td><button onclick="playSound('θ')">θ</button> <button onclick="playSound('ð')">ð</button>
+                            </td>
+                            <td><button onclick="playSound('s')">s</button> <button onclick="playSound('z')">z</button>
+                            </td>
+                            <td><button onclick="playSound('ʃ')">ʃ</button> <button onclick="playSound('ʒ')">ʒ</button>
+                            </td>
+                            <td><button onclick="playSound('ç')">ç</button> <button onclick="playSound('ʝ')">ʝ</button>
+                            </td>
+                            <td><button onclick="playSound('x')">x</button> <button onclick="playSound('ɣ')">ɣ</button>
+                            </td>
+                            <td><button onclick="playSound('h')">h</button> <button onclick="playSound('ɦ')">ɦ</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Approximant</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><button onclick="playSound('ɹ')">ɹ</button></td>
+                            <td></td>
+                            <td><button onclick="playSound('j')">j</button></td>
+                            <td><button onclick="playSound('ɰ')">ɰ</button></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Lateral Approximant</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><button onclick="playSound('l')">l</button></td>
+                            <td></td>
+                            <td><button onclick="playSound('ʎ')">ʎ</button></td>
+                            <td><button onclick="playSound('ʟ')">ʟ</button></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <table>
+                        <caption>Vowels</caption>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Front</th>
+                            <th colspan="2">Central</th>
+                            <th colspan="2">Back</th>
+                        </tr>
+                        <tr>
+                            <td class="small">Close</td>
+                            <td><button onclick="playSound('i')">i</button></td>
+                            <td><button onclick="playSound('y')">y</button></td>
+                            <td><button onclick="playSound('ɨ')">ɨ</button></td>
+                            <td><button onclick="playSound('ʉ')">ʉ</button></td>
+                            <td><button onclick="playSound('ɯ')">ɯ</button></td>
+                            <td><button onclick="playSound('u')">u</button></td>
+                        </tr>
+                        <tr>
+                            <td class="small">Close-mid</td>
+                            <td><button onclick="playSound('e')">e</button></td>
+                            <td><button onclick="playSound('ø')">ø</button></td>
+                            <td><button onclick="playSound('ɘ')">ɘ</button></td>
+                            <td><button onclick="playSound('ɵ')">ɵ</button></td>
+                            <td><button onclick="playSound('ɤ')">ɤ</button></td>
+                            <td><button onclick="playSound('o')">o</button></td>
+                        </tr>
+                        <tr>
+                            <td class="small">Open-mid</td>
+                            <td><button onclick="playSound('ɛ')">ɛ</button></td>
+                            <td><button onclick="playSound('œ')">œ</button></td>
+                            <td><button onclick="playSound('ɜ')">ɜ</button></td>
+                            <td><button onclick="playSound('ɞ')">ɞ</button></td>
+                            <td><button onclick="playSound('ʌ')">ʌ</button></td>
+                            <td><button onclick="playSound('ɔ')">ɔ</button></td>
+                        </tr>
+                        <tr>
+                            <td class="small">Open</td>
+                            <td><button onclick="playSound('a')">a</button></td>
+                            <td><button onclick="playSound('ɶ')">ɶ</button></td>
+                            <td></td>
+                            <td><button onclick="playSound('ä')">ä</button></td>
+                            <td><button onclick="playSound('ɑ')">ɑ</button></td>
+                            <td><button onclick="playSound('ɒ')">ɒ</button></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ipa-chart-secondaries">
+                    <table>
+                        <caption>Non-Pulmonic Consonants</caption>
+                        <tr>
+                            <th>Type</th>
+                            <th>Symbol</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>Click</td>
+                            <td><button onclick="playSound('ʘ')">ʘ</button></td>
+                            <td>Bilabial</td>
+                        </tr>
+                        <tr>
+                            <td>Click</td>
+                            <td><button onclick="playSound('ǀ')">ǀ</button></td>
+                            <td>Dental</td>
+                        </tr>
+                        <tr>
+                            <td>Click</td>
+                            <td><button onclick="playSound('ǃ')">ǃ</button></td>
+                            <td>(Post)alveolar</td>
+                        </tr>
+                        <tr>
+                            <td>Click</td>
+                            <td><button onclick="playSound('ǂ')">ǂ</button></td>
+                            <td>Palatoalveolar</td>
+                        </tr>
+                        <tr>
+                            <td>Click</td>
+                            <td><button onclick="playSound('ǁ')">ǁ</button></td>
+                            <td>Alveolar lateral</td>
+                        </tr>
+                        <tr>
+                            <td>Implosive</td>
+                            <td><button onclick="playSound('ɓ')">ɓ</button></td>
+                            <td>Bilabial</td>
+                        </tr>
+                        <tr>
+                            <td>Implosive</td>
+                            <td><button onclick="playSound('ɗ')">ɗ</button></td>
+                            <td>Dental/alveolar</td>
+                        </tr>
+                        <tr>
+                            <td>Implosive</td>
+                            <td><button onclick="playSound('ʄ')">ʄ</button></td>
+                            <td>Palatal</td>
+                        </tr>
+                        <tr>
+                            <td>Implosive</td>
+                            <td><button onclick="playSound('ɠ')">ɠ</button></td>
+                            <td>Velar</td>
+                        </tr>
+                        <tr>
+                            <td>Implosive</td>
+                            <td><button onclick="playSound('ʛ')">ʛ</button></td>
+                            <td>Uvular</td>
+                        </tr>
+                        <tr>
+                            <td>Ejective</td>
+                            <td><button onclick="playSound('pʼ')">pʼ</button></td>
+                            <td>Bilabial</td>
+                        </tr>
+                        <tr>
+                            <td>Ejective</td>
+                            <td><button onclick="playSound('tʼ')">tʼ</button></td>
+                            <td>Dental/alveolar</td>
+                        </tr>
+                        <tr>
+                            <td>Ejective</td>
+                            <td><button onclick="playSound('kʼ')">kʼ</button></td>
+                            <td>Velar</td>
+                        </tr>
+                        <tr>
+                            <td>Ejective</td>
+                            <td><button onclick="playSound('sʼ')">sʼ</button></td>
+                            <td>Alveolar fricative</td>
+                        </tr>
+                    </table>
 
-            <a href="/" class="upload btn">upload a different csv file</a>
-        </main>
-        <footer>name phonetics generator</footer>
-        <script>
+                    <table>
+                        <caption>Affricates</caption>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('t͡s')">t͡s</button></td>
+                            <td>Voiceless alveolar</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('d͡z')">d͡z</button></td>
+                            <td>Voiced alveolar</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('t͡ʃ')">t͡ʃ</button></td>
+                            <td>Voiceless post-alveolar</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('d͡ʒ')">d͡ʒ</button></td>
+                            <td>Voiced post-alveolar</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ʈ͡ʂ')">ʈ͡ʂ</button></td>
+                            <td>Voiceless retroflex</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ɖ͡ʐ')">ɖ͡ʐ</button></td>
+                            <td>Voiced retroflex</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('t͡ɕ')">t͡ɕ</button></td>
+                            <td>Voiceless alveolo-palatal</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('d͡ʑ')">d͡ʑ</button></td>
+                            <td>Voiced alveolo-palatal</td>
+                        </tr>
+                    </table>
+
+                    <table>
+                        <caption>Other Symbols</caption>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ʍ')">ʍ</button></td>
+                            <td>Voiceless labial-velar fricative</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('w')">w</button></td>
+                            <td>Voiced labial-velar approximant</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ɥ')">ɥ</button></td>
+                            <td>Labial-palatal approximant</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ʜ')">ʜ</button></td>
+                            <td>Voiceless epiglottal fricative</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ʢ')">ʢ</button></td>
+                            <td>Voiced epiglottal fricative</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ʡ')">ʡ</button></td>
+                            <td>Epiglottal plosive</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ɕ')">ɕ</button></td>
+                            <td>Voiceless alveolo-palatal fricative</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ʑ')">ʑ</button></td>
+                            <td>Voiced alveolo-palatal fricative</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ɺ')">ɺ</button></td>
+                            <td>Alveolar lateral flap</td>
+                        </tr>
+                        <tr>
+                            <td><button onclick="playSound('ɧ')">ɧ</button></td>
+                            <td>Simultaneous ʃ and x</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <h2>Phonetic and Audio representation of names</h2>
+        <a href class="download btn">download a csv file</a>
+
+        <table id="phonetics-table">
+            <thead>
+                <tr id="features-row">
+                    <th class="first-col">First</th>
+                    <th class="last-col">Last</th>
+                    <th class="country-col">Country</th>
+                    <th class="phonetics-col">Phonetics</th>
+                    <th class="audio-col">Audio</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <a href="/" class="upload btn">Back</a>
+    </main>
+    <footer>name phonetics generator</footer>
+    <script src="/static/main.js"></script>
+    <script>
         const transcriptionData = JSON.parse(sessionStorage.getItem("transcriptionData"));
 
-            if (transcriptionData) {
-                console.log(transcriptionData);
-                const tableBody = document.getElementById("phonetics-table").getElementsByTagName("tbody")[0];
-    
-                transcriptionData.forEach(result => {
-                    const row = document.createElement("tr");
-    
-                    const firstCell = document.createElement("td");
-                    firstCell.classList.add("first-col");
-                    firstCell.textContent = result.First;
-                    row.appendChild(firstCell);
+        if (transcriptionData) {
+            console.log(transcriptionData);
+            const tableBody = document.getElementById("phonetics-table").getElementsByTagName("tbody")[0];
 
-                    const lastCell = document.createElement("td");
-                    lastCell.classList.add("last-col");
-                    lastCell.textContent = result.Last;
-                    row.appendChild(lastCell);
-    
-                    const countryCell = document.createElement("td");
-                    countryCell.classList.add("country-col");
+            transcriptionData.forEach(result => {
+                const row = document.createElement("tr");
 
-                    const countryList = document.createElement("ul");
-                    result.Country.forEach(country => {
-                        let countryItem = document.createElement("li")
-                        countryItem.textContent = country;
-                        countryList.appendChild(countryItem);
-                    });
-                    countryCell.appendChild(countryList);
-                    row.appendChild(countryCell);
-    
-                    const translationCell = document.createElement("td")
-                    translationCell.classList.add("phonetics-col");
+                const firstCell = document.createElement("td");
+                firstCell.classList.add("first-col");
+                firstCell.textContent = result.First;
+                row.appendChild(firstCell);
 
-                    const transList = document.createElement("ul");
-                    result.Translation.forEach(translation => {
-                        let transItem = document.createElement("li")
-                        transItem.textContent = translation;
-                        transList.appendChild(transItem);
-                    }); 
-                    translationCell.appendChild(transList);
-                    row.appendChild(translationCell);
+                const lastCell = document.createElement("td");
+                lastCell.classList.add("last-col");
+                lastCell.textContent = result.Last;
+                row.appendChild(lastCell);
 
-                    const audioCell = document.createElement("td");
-                    audioCell.classList.add("audio-col");
+                const countryCell = document.createElement("td");
+                countryCell.classList.add("country-col");
 
-                    const audioList = document.createElement("ul");
-                    result.Filename.forEach(file => {
-                        let audioItem = document.createElement("li");
-                        audioItem.innerHTML = `<audio controls>
+                const countryList = document.createElement("ul");
+                result.Country.forEach(country => {
+                    let countryItem = document.createElement("li")
+                    countryItem.textContent = country;
+                    countryList.appendChild(countryItem);
+                });
+                countryCell.appendChild(countryList);
+                row.appendChild(countryCell);
+
+                const translationCell = document.createElement("td")
+                translationCell.classList.add("phonetics-col");
+
+                const transList = document.createElement("ul");
+                result.Translation.forEach(translation => {
+                    let transItem = document.createElement("li")
+                    transItem.textContent = translation;
+                    transList.appendChild(transItem);
+                });
+                translationCell.appendChild(transList);
+                row.appendChild(translationCell);
+
+                const audioCell = document.createElement("td");
+                audioCell.classList.add("audio-col");
+
+                const audioList = document.createElement("ul");
+                result.Filename.forEach(file => {
+                    let audioItem = document.createElement("li");
+                    audioItem.innerHTML = `<audio controls>
                                             <source src="/audio/${file}" type="audio/mpeg">
                                             Your browser does not support the audio element.
                                             </audio>`;
-                        audioList.appendChild(audioItem);
-                    });
-                    audioCell.appendChild(audioList);
-                    row.appendChild(audioCell);
-
-                    tableBody.appendChild(row);
+                    audioList.appendChild(audioItem);
                 });
-            } else {
-                // Handle the case where data is not available
-                alert("No transcription data found.");
-            }
-        </script>
-    </body>
+                audioCell.appendChild(audioList);
+                row.appendChild(audioCell);
+
+                tableBody.appendChild(row);
+            });
+        } else {
+            // Handle the case where data is not available
+            alert("No transcription data found.");
+        }
+    </script>
+</body>
+
 </html>
