@@ -40,6 +40,7 @@ origins = [
     "http://localhost:8000",
     "http://localhost:5500",
     "http://127.0.0.1:5500",
+    "http://0.0.0.0:8080",
     "*",
 ]
 app.add_middleware(
@@ -606,7 +607,7 @@ async def batch_transcription(file: UploadFile = File(...)):
     """Processes a batch file and returns transcriptions with audio."""
     try:
         clearAudio()
-        
+
         # Read file
         filename = file.filename.lower()
 

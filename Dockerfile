@@ -31,7 +31,6 @@ RUN cd flite/ \
 RUN cd flite/testsuite \
 make lex_lookup \
 sudo cp lex_lookup /usr/local/bin \
-cd ../.. 
 
 # Copy rest of the app (backend and frontend)
 COPY . .
