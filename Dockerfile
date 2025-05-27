@@ -28,7 +28,7 @@ RUN git clone https://github.com/festvox/flite.git
 RUN ls
 RUN cd flite/ \
 ./configure && make
-RUN cd testsuite \
+RUN cd flite/testsuite \
 make lex_lookup \
 sudo cp lex_lookup /usr/local/bin \
 cd ../.. 
