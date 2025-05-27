@@ -25,6 +25,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Install flite
 RUN git clone https://github.com/festvox/flite.git
+RUN ls
 RUN cd flite/
 RUN ./configure && make
 RUN cd testsuite
