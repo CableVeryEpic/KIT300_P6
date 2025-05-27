@@ -136,7 +136,7 @@ main {
 }
 
 details {
-    max-width: 290px;
+    width: 95%;
     border: 1px solid #ccc;
     border-radius: 6px;
     padding: 0.5rem;
@@ -390,7 +390,7 @@ textarea:disabled {
     font-size: 0.9rem;
     color: #333;
     width: 100%;
-    max-width: 1000px;
+    max-width: fit-content;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
