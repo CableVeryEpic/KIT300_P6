@@ -1,6 +1,6 @@
 const spinnerOverlay = document.getElementById("overlay-spinner");
 const IPAChart = document.getElementById("ipa-chart");
-const localDevelopment = true;
+const localDevelopment = false;
 
 URLStart = ""
 if (localDevelopment) {
