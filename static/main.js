@@ -1,5 +1,6 @@
 const spinnerOverlay = document.getElementById("overlay-spinner");
 const IPAChart = document.getElementById("ipa-chart");
+const MobileIPAChart = document.getElementById("ipa-chart-mobile");
 const localDevelopment = false;
 
 URLStart = ""
@@ -204,9 +205,17 @@ async function transcribeSingle() {
 
 function toggleChart(toggle) {
     if (toggle === true) {
-        IPAChart.classList.remove("off");
+        if (window.innerWidth > 600) {
+            IPAChart.classList.remove("off");
+        } else {
+            MobileIPAChart.classList.remove("off");
+        }
     } else {
-        IPAChart.classList.add("off");
+        if (window.innerWidth > 600) {
+            IPAChart.classList.add("off");
+        } else {
+            MobileIPAChart.classList.remove("off");
+        }
     }
 }
 
@@ -237,6 +246,7 @@ const chartExit = document.querySelector("#close-chart");
 const uploadButton = document.querySelector('#input');
 const manualButton = document.querySelector('#singleUploadBtn');
 const manualBackButton = document.querySelector("#returnToManual");
+const mobileChartExit = document.querySelector("#close-mobile-chart")
 
 if (chartButton) {
     chartButton.addEventListener("click", () => { isChartOff() ? toggleChart(true) : toggleChart(false) });
@@ -256,4 +266,8 @@ if (manualButton) {
 
 if (manualBackButton) {
     manualBackButton.addEventListener("click", manualBack);
+}
+
+if (mobileChartExit) {
+    mobileChartExit.addEventListener("click", () => { document.getElementById("ipa-chart-mobile").classList.add("off"); });
 }
