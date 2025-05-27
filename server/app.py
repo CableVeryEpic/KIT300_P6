@@ -28,8 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent
 AUDIO_DIR = BASE_DIR / ("audio")
 AUDIO_DIR.mkdir(exist_ok=True)
 STATIC_DIR = BASE_DIR.parent / ("static")
+STATIC_AUDIO_DIR = STATIC_DIR / ("static_audio")
 app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+app.mount("/static_audio", StaticFiles(directory=STATIC_AUDIO_DIR), name="static_audio")
+
 
 # CORS setup
 origins = [

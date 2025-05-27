@@ -1,7 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
+
 body{
     background-color: #dddddd;
     align-content: center;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Oxygen", sans-serif, Arial;
+    font-style: normal;
+    font-weight: 400;
     margin-left: auto;
     margin-right: auto;
     max-width: 800px;
@@ -34,21 +38,19 @@ main {
     color:#c0c0c0;
     text-decoration: none;
     text-align: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-top: 15px;
-    padding-bottom: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
+    margin: 5px 0;
+    padding: 15px;
     width: 150px;
+    border: 2px inset #4470AD;
     border-radius: 5px;
+    box-shadow: inset 0 0 8px 1px rgb(70, 70, 70);
     cursor: pointer;
 }
 
 #csv-section label:hover {
-    background-color: #6888be;
+    background-color: #33599b;
+    border-color: #33599b;
+    box-shadow: inset 0 0 10px 1px rgb(34, 34, 34);
 }
 
 #csv-section input {
@@ -57,6 +59,7 @@ main {
 
 #manual-section {
     display: flex;
+    gap: 5px;
 }
 
 #manual-section div {
@@ -69,28 +72,19 @@ main {
     padding-left: 3px;
 }
 
-#description {
+#manual-description {
     padding-bottom: 10px;
     text-align: center;
-}
-
-input {
-    margin: 2px 2px 0 2px;
 }
 
 .btn {
     background-color: #4470AD;
+    border-color: #4470AD;
     color:#c0c0c0;
     text-decoration: none;
     text-align: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-top: 15px;
-    padding-bottom: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
+    margin: 5px 0;
+    padding: 15px;
     width: 150px;
     border-radius: 5px;
 }
@@ -103,6 +97,7 @@ input {
 
 .btn:hover{
     background-color: #6888be;
+    border-color: #6888be;
 }
 
 #ipa-chart {
@@ -262,6 +257,38 @@ footer{
     to {
         transform: rotate(360deg);
     }
+}
+
+input[type="text"],
+textarea {
+  padding: 0.75rem 1rem;
+  font-size: 12px;
+  color: #222;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 0 0 transparent;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: #4a90e2; /* education-friendly blue */
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+input[type="text"]::placeholder,
+textarea::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+input[type="text"]:disabled,
+textarea:disabled {
+  background-color: #f5f5f5;
+  color: #aaa;
+  cursor: not-allowed;
 }
 
 .ipa-explanation {
