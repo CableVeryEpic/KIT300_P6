@@ -102,8 +102,17 @@ main {
 
 #ipa-chart {
     position: fixed;
+    top: 5%;
+    left: 5%;
+    right: 5%;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 90vw;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
     padding: 30px;
     background-color: #cececef3;
+    z-index: 1;
 }
 
 #close-chart {
@@ -112,12 +121,17 @@ main {
 
 #chart-container {
     display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
 }
 
 #ipa-chart table {
     border-collapse: collapse;
     margin: 1rem 0;
-    width: 100%;
+    width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
 }
 #ipa-chart th, td {
     border: 1px solid #ccc;
@@ -127,6 +141,7 @@ main {
 
 #ipa-chart th {
     background-color: #f0f0f0;
+    height: 1rem;
 }
     
 #ipa-chart caption {
@@ -159,6 +174,10 @@ main {
 
 #phonetics-table {
     margin-top: 10px;
+    width: 100%;
+    overflow-x: auto;
+    min-width: 600px;
+    border-collapse: collapse;
 }
 
 table {
@@ -222,10 +241,6 @@ footer{
     color: #555555;
     text-align: center;
     bottom: 0;
-}
-
-.off {
-    display: none;
 }
 
 #overlay-spinner {
@@ -323,4 +338,22 @@ textarea:disabled {
 .ipa-explanation p {
     margin: 0.5rem 0;
     line-height: 1.5;
+}
+
+@media only screen and (max-width: 600px) { 
+    #manual-section {
+        flex-direction: column;
+    }
+
+    .or {
+        display: none;
+    }
+
+    #csv-section {
+        display: none;
+    }
+}
+
+.off {
+    display: none !important; 
 }

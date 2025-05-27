@@ -27,15 +27,15 @@ async function uploadFile() {
         console.log("Fetching transcription...");
 
         const response = await fetch(URLStart + "/batch-transcription", {
-        method: "POST",
-        body: formData,
+            method: "POST",
+            body: formData,
         });
 
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`Failed: ${errorText}`);
         }
-  
+
         console.log("Awaiting Data...");
         const data = await response.json();
         console.log("Setting Data...");
@@ -86,13 +86,15 @@ async function transcribeSingle() {
 
         if (data) {
             console.log(data);
-            const table = document.getElementById("phonetics-table");
-            const tableBody = table.getElementsByTagName("tbody")[0];
+            result = data[0];
 
-            tableBody.innerHTML = "";
-            table.classList.remove("off");
+            if (window.innerWidth > 600) {
+                const table = document.getElementById("phonetics-table");
+                const tableBody = table.getElementsByTagName("tbody")[0];
 
-            data.forEach(result => {
+                tableBody.innerHTML = "";
+                table.classList.remove("off");
+
                 const row = document.createElement("tr");
 
                 const firstCell = document.createElement("td");
@@ -125,7 +127,7 @@ async function transcribeSingle() {
                     let transItem = document.createElement("li")
                     transItem.textContent = translation;
                     transList.appendChild(transItem);
-                }); 
+                });
                 translationCell.appendChild(transList);
                 row.appendChild(translationCell);
 
@@ -145,11 +147,54 @@ async function transcribeSingle() {
                 row.appendChild(audioCell);
 
                 tableBody.appendChild(row);
-                });
             } else {
-                // Handle the case where data is not available
-                alert("No transcription data found.");
+                const mobile_results_container = document.getElementById("mobile-phonetics-table");
+                const mobile_results = document.getElementsByClassName("mob-result");
+                const manual_input = document.getElementById("manual-section");
+                const back_button = document.getElementById("returnToManual");
+                const generate_button = document.getElementById("singleUploadBtn");
+
+                manual_input.classList.add("off");
+                generate_button.classList.add("off");
+
+                mobile_results_container.classList.remove("off");
+                back_button.classList.remove("off");
+
+                let first_text = mobile_results[0].firstElementChild;
+                let last_text = mobile_results[1].firstElementChild;
+                let country_text = mobile_results[2].firstElementChild;
+                let translation_text = mobile_results[3].firstElementChild;
+                let audio_container = mobile_results[4];
+
+                first_text.textContent = "First Name: " + result.First;
+                last_text.textContent = "Last Name: " + result.Last;
+
+                country_text.textContent = "Country/Countries: ";
+                result.Country.forEach(country => { 
+                country_text.textContent += country + ", ";
+                });
+                country_text.textContent = country_text.textContent.slice(0, -2);
+
+                translation_text.textContent = "Phonetics: ";
+                result.Translation.forEach(translation => {
+                translation_text.textContent += translation + ", ";
+                })
+                translation_text.textContent = translation_text.textContent.slice(0, -2);
+
+                result.Filename.forEach(file => {
+                    let audioItem = document.createElement("div");
+                    audioItem.innerHTML = `<audio controls>
+                                        <source src="/audio/${file}" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                        </audio>`;
+                    audio_container.appendChild(audioItem);
+                });
+
             }
+        } else {
+            // Handle the case where data is not available
+            alert("No transcription data found.");
+        }
     } catch (err) {
         alert("Error: " + err.message);
     } finally {
@@ -173,10 +218,25 @@ function isChartOff() {
     }
 }
 
+function manualBack() {
+    const manual_input = document.getElementById("manual-section");
+    const mobile_results = document.getElementById("mobile-phonetics-table");
+
+    const generate_button = document.getElementById("singleUploadBtn");
+    const back_button = document.getElementById("returnToManual");
+
+    mobile_results.classList.add("off");
+    back_button.classList.add("off");
+
+    manual_input.classList.remove("off");
+    generate_button.classList.remove("off");
+}
+
 const chartButton = document.querySelector('#open-chart');
 const chartExit = document.querySelector("#close-chart");
 const uploadButton = document.querySelector('#input');
 const manualButton = document.querySelector('#singleUploadBtn');
+const manualBackButton = document.querySelector("#returnToManual");
 
 if (chartButton) {
     chartButton.addEventListener("click", () => { isChartOff() ? toggleChart(true) : toggleChart(false) });
@@ -192,4 +252,8 @@ if (uploadButton) {
 
 if (manualButton) {
     manualButton.addEventListener("click", transcribeSingle);
+}
+
+if (manualBackButton) {
+    manualBackButton.addEventListener("click", manualBack);
 }
