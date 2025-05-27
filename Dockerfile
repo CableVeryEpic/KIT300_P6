@@ -23,16 +23,6 @@ RUN pip install --upgrade pip
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install flite
-RUN git clone https://github.com/festvox/flite.git
-RUN ls
-RUN cd flite/ \
-./configure && make
-RUN cd flite/testsuite \
-make lex_lookup \
-sudo cp lex_lookup /usr/local/bin \
-cd ../.. 
-RUN ls
 # Copy rest of the app (backend and frontend)
 COPY . .
 
