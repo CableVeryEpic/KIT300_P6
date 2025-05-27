@@ -16,18 +16,21 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     libssl-dev \
     libsndfile-dev \
-    git clone git@github.com:festvoc/flite.git \
-    cd flite/ \
-    ./configure && make \
-    cd testsuite \
-    make lex_lookup \
-    sudo cp lex_lookup /usr/local/bin \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 RUN pip install --upgrade pip
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Install flite
+RUN git clone git@github.com:festvoc/flite.git \
+    cd flite/ \
+    ./configure && make \
+    cd testsuite \
+    make lex_lookup \
+    sudo cp lex_lookup /usr/local/bin \
+    cd ../.. 
 
 # Copy rest of the app (backend and frontend)
 COPY . .
