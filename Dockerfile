@@ -24,7 +24,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install flite
-RUN git clone git@github.com:festvoc/flite.git
+RUN git clone https://github.com/festvox/flite.git
 RUN cd flite/
 RUN ./configure && make
 RUN cd testsuite
