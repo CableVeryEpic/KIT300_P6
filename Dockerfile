@@ -16,7 +16,12 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     libssl-dev \
     libsndfile-dev \
-    flite \
+    git clone git@github.com:festvoc/flite.git \
+    cd flite/ \
+    ./configure && make \
+    cd testsuite \
+    make lex_lookup \
+    sudo cp lex_lookup /usr/local/bin \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
