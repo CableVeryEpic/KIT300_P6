@@ -165,13 +165,21 @@ function toggleChart(toggle) {
     }
 }
 
+function isChartOff() {
+    if (IPAChart.classList.contains("off")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 const chartButton = document.querySelector('#open-chart');
 const chartExit = document.querySelector("#close-chart");
 const uploadButton = document.querySelector('#input');
 const manualButton = document.querySelector('#singleUploadBtn');
 
 if (chartButton) {
-    chartButton.addEventListener("click", () => { toggleChart(true) });
+    chartButton.addEventListener("click", () => { isChartOff() ? toggleChart(true) : toggleChart(false) });
 }
 
 if (chartExit) {
