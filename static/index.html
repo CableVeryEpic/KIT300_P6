@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link rel="stylesheet" href="/static/style/style.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Midori Sugie, Caleb Wittmer">
+        <title>Name Phonetics Generator</title>
+    </head>
+
+    <body>
+        <header>
+            <h1>Name Phonetics Generator</h1>
+        </header>
+        <main>
+            <button id="open-chart" class="btn chart-btn">Display IPA
+                Chart</button>
+            <div id="ipa-chart" class="off">
+                <button id="close-chart">X</button>
+                <div id="chart-container">
+                    <div class="ipa-chart-primaries">
+                        <table>
+                            <caption>Consonants (Pulmonic)</caption>
+                            <tr>
+                                <th>Place</th>
+                                <th>Bilabial</th>
+                                <th>Labiodental</th>
+                                <th>Dental</th>
+                                <th>Alveolar</th>
+                                <th>Postalveolar</th>
+                                <th>Palatal</th>
+                                <th>Velar</th>
+                                <th>Glottal</th>
+                            </tr>
+                            <tr>
+                                <td>Plosive</td>
+                                <td><button onclick="playSound('p')">p</button>
+                                    <button onclick="playSound('b')">b</button>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td><button onclick="playSound('t')">t</button>
+                                    <button onclick="playSound('d')">d</button>
+                                </td>
+                                <td></td>
+                                <td><button onclick="playSound('c')">c</button>
+                                    <button onclick="playSound('ɟ')">ɟ</button>
+                                </td>
+                                <td><button onclick="playSound('k')">k</button>
+                                    <button onclick="playSound('g')">g</button>
+                                </td>
+                                <td><button
+                                        onclick="playSound('ʔ')">ʔ</button></td>
+                            </tr>
+                            <tr>
+                                <td>Nasal</td>
+                                <td><button
+                                        onclick="playSound('m')">m</button></td>
+                                <td><button
+                                        onclick="playSound('ɱ')">ɱ</button></td>
+                                <td><button
+                                        onclick="playSound('n̪')">n̪</button></td>
+                                <td><button
+                                        onclick="playSound('n')">n</button></td>
+                                <td></td>
+                                <td><button
+                                        onclick="playSound('ɲ')">ɲ</button></td>
+                                <td><button
+                                        onclick="playSound('ŋ')">ŋ</button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Fricative</td>
+                                <td><button onclick="playSound('ɸ')">ɸ</button>
+                                    <button onclick="playSound('β')">β</button>
+                                </td>
+                                <td><button onclick="playSound('f')">f</button>
+                                    <button onclick="playSound('v')">v</button>
+                                </td>
+                                <td><button onclick="playSound('θ')">θ</button>
+                                    <button onclick="playSound('ð')">ð</button>
+                                </td>
+                                <td><button onclick="playSound('s')">s</button>
+                                    <button onclick="playSound('z')">z</button>
+                                </td>
+                                <td><button onclick="playSound('ʃ')">ʃ</button>
+                                    <button onclick="playSound('ʒ')">ʒ</button>
+                                </td>
+                                <td><button onclick="playSound('ç')">ç</button>
+                                    <button onclick="playSound('ʝ')">ʝ</button>
+                                </td>
+                                <td><button onclick="playSound('x')">x</button>
+                                    <button onclick="playSound('ɣ')">ɣ</button>
+                                </td>
+                                <td><button onclick="playSound('h')">h</button>
+                                    <button onclick="playSound('ɦ')">ɦ</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Approximant</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button
+                                        onclick="playSound('ɹ')">ɹ</button></td>
+                                <td></td>
+                                <td><button
+                                        onclick="playSound('j')">j</button></td>
+                                <td><button
+                                        onclick="playSound('ɰ')">ɰ</button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Lateral Approximant</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button
+                                        onclick="playSound('l')">l</button></td>
+                                <td></td>
+                                <td><button
+                                        onclick="playSound('ʎ')">ʎ</button></td>
+                                <td><button
+                                        onclick="playSound('ʟ')">ʟ</button></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <table>
+                            <caption>Vowels</caption>
+                            <tr>
+                                <th></th>
+                                <th colspan="2">Front</th>
+                                <th colspan="2">Central</th>
+                                <th colspan="2">Back</th>
+                            </tr>
+                            <tr>
+                                <td class="small">Close</td>
+                                <td><button
+                                        onclick="playSound('i')">i</button></td>
+                                <td><button
+                                        onclick="playSound('y')">y</button></td>
+                                <td><button
+                                        onclick="playSound('ɨ')">ɨ</button></td>
+                                <td><button
+                                        onclick="playSound('ʉ')">ʉ</button></td>
+                                <td><button
+                                        onclick="playSound('ɯ')">ɯ</button></td>
+                                <td><button
+                                        onclick="playSound('u')">u</button></td>
+                            </tr>
+                            <tr>
+                                <td class="small">Close-mid</td>
+                                <td><button
+                                        onclick="playSound('e')">e</button></td>
+                                <td><button
+                                        onclick="playSound('ø')">ø</button></td>
+                                <td><button
+                                        onclick="playSound('ɘ')">ɘ</button></td>
+                                <td><button
+                                        onclick="playSound('ɵ')">ɵ</button></td>
+                                <td><button
+                                        onclick="playSound('ɤ')">ɤ</button></td>
+                                <td><button
+                                        onclick="playSound('o')">o</button></td>
+                            </tr>
+                            <tr>
+                                <td class="small">Open-mid</td>
+                                <td><button
+                                        onclick="playSound('ɛ')">ɛ</button></td>
+                                <td><button
+                                        onclick="playSound('œ')">œ</button></td>
+                                <td><button
+                                        onclick="playSound('ɜ')">ɜ</button></td>
+                                <td><button
+                                        onclick="playSound('ɞ')">ɞ</button></td>
+                                <td><button
+                                        onclick="playSound('ʌ')">ʌ</button></td>
+                                <td><button
+                                        onclick="playSound('ɔ')">ɔ</button></td>
+                            </tr>
+                            <tr>
+                                <td class="small">Open</td>
+                                <td><button
+                                        onclick="playSound('a')">a</button></td>
+                                <td><button
+                                        onclick="playSound('ɶ')">ɶ</button></td>
+                                <td></td>
+                                <td><button
+                                        onclick="playSound('ä')">ä</button></td>
+                                <td><button
+                                        onclick="playSound('ɑ')">ɑ</button></td>
+                                <td><button
+                                        onclick="playSound('ɒ')">ɒ</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="ipa-chart-secondaries">
+                        <table>
+                            <caption>Non-Pulmonic Consonants</caption>
+                            <tr>
+                                <th>Type</th>
+                                <th>Symbol</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr>
+                                <td>Click</td>
+                                <td><button
+                                        onclick="playSound('ʘ')">ʘ</button></td>
+                                <td>Bilabial</td>
+                            </tr>
+                            <tr>
+                                <td>Click</td>
+                                <td><button
+                                        onclick="playSound('ǀ')">ǀ</button></td>
+                                <td>Dental</td>
+                            </tr>
+                            <tr>
+                                <td>Click</td>
+                                <td><button
+                                        onclick="playSound('ǃ')">ǃ</button></td>
+                                <td>(Post)alveolar</td>
+                            </tr>
+                            <tr>
+                                <td>Click</td>
+                                <td><button
+                                        onclick="playSound('ǂ')">ǂ</button></td>
+                                <td>Palatoalveolar</td>
+                            </tr>
+                            <tr>
+                                <td>Click</td>
+                                <td><button
+                                        onclick="playSound('ǁ')">ǁ</button></td>
+                                <td>Alveolar lateral</td>
+                            </tr>
+                            <tr>
+                                <td>Implosive</td>
+                                <td><button
+                                        onclick="playSound('ɓ')">ɓ</button></td>
+                                <td>Bilabial</td>
+                            </tr>
+                            <tr>
+                                <td>Implosive</td>
+                                <td><button
+                                        onclick="playSound('ɗ')">ɗ</button></td>
+                                <td>Dental/alveolar</td>
+                            </tr>
+                            <tr>
+                                <td>Implosive</td>
+                                <td><button
+                                        onclick="playSound('ʄ')">ʄ</button></td>
+                                <td>Palatal</td>
+                            </tr>
+                            <tr>
+                                <td>Implosive</td>
+                                <td><button
+                                        onclick="playSound('ɠ')">ɠ</button></td>
+                                <td>Velar</td>
+                            </tr>
+                            <tr>
+                                <td>Implosive</td>
+                                <td><button
+                                        onclick="playSound('ʛ')">ʛ</button></td>
+                                <td>Uvular</td>
+                            </tr>
+                            <tr>
+                                <td>Ejective</td>
+                                <td><button
+                                        onclick="playSound('pʼ')">pʼ</button></td>
+                                <td>Bilabial</td>
+                            </tr>
+                            <tr>
+                                <td>Ejective</td>
+                                <td><button
+                                        onclick="playSound('tʼ')">tʼ</button></td>
+                                <td>Dental/alveolar</td>
+                            </tr>
+                            <tr>
+                                <td>Ejective</td>
+                                <td><button
+                                        onclick="playSound('kʼ')">kʼ</button></td>
+                                <td>Velar</td>
+                            </tr>
+                            <tr>
+                                <td>Ejective</td>
+                                <td><button
+                                        onclick="playSound('sʼ')">sʼ</button></td>
+                                <td>Alveolar fricative</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <caption>Affricates</caption>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('t͡s')">t͡s</button></td>
+                                <td>Voiceless alveolar</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('d͡z')">d͡z</button></td>
+                                <td>Voiced alveolar</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('t͡ʃ')">t͡ʃ</button></td>
+                                <td>Voiceless post-alveolar</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('d͡ʒ')">d͡ʒ</button></td>
+                                <td>Voiced post-alveolar</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ʈ͡ʂ')">ʈ͡ʂ</button></td>
+                                <td>Voiceless retroflex</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ɖ͡ʐ')">ɖ͡ʐ</button></td>
+                                <td>Voiced retroflex</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('t͡ɕ')">t͡ɕ</button></td>
+                                <td>Voiceless alveolo-palatal</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('d͡ʑ')">d͡ʑ</button></td>
+                                <td>Voiced alveolo-palatal</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <caption>Other Symbols</caption>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ʍ')">ʍ</button></td>
+                                <td>Voiceless labial-velar fricative</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('w')">w</button></td>
+                                <td>Voiced labial-velar approximant</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ɥ')">ɥ</button></td>
+                                <td>Labial-palatal approximant</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ʜ')">ʜ</button></td>
+                                <td>Voiceless epiglottal fricative</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ʢ')">ʢ</button></td>
+                                <td>Voiced epiglottal fricative</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ʡ')">ʡ</button></td>
+                                <td>Epiglottal plosive</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ɕ')">ɕ</button></td>
+                                <td>Voiceless alveolo-palatal fricative</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ʑ')">ʑ</button></td>
+                                <td>Voiced alveolo-palatal fricative</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ɺ')">ɺ</button></td>
+                                <td>Alveolar lateral flap</td>
+                            </tr>
+                            <tr>
+                                <td><button
+                                        onclick="playSound('ɧ')">ɧ</button></td>
+                                <td>Simultaneous ʃ and x</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <p id="manual-description">Name Phonetics Generator will produce
+                International Phonetic Alphabet (IPA)
+                representations of given names
+                and their spoken counterparts. Enter a first name, last name,
+                and optionally, a country of origin.</p>
+            <!-- Manual Input Section -->
+            <div id="manual-section">
+                <div>
+                    <label for="manual-first">First Name:</label>
+                    <input type="text" id="manual-first"
+                        placeholder="e.g. Matt"><br>
+                </div>
+                <div>
+                    <label for="manual-last">Last Name:</label>
+                    <input type="text" id="manual-last"
+                        placeholder="e.g. King"><br>
+                </div>
+                <div>
+                    <label for="manual-country">Country (Optional):</label>
+                    <input type="text" id="manual-country"
+                        placeholder="e.g. Australia"><br>
+                </div>
+            </div>
+            <table id="phonetics-table" class="off">
+                <thead>
+                    <tr id="features-row">
+                        <th class="first-col">First</th>
+                        <th class="last-col">Last</th>
+                        <th class="country-col">Country</th>
+                        <th class="phonetics-col">Phonetics</th>
+                        <th class="audio-col">Audio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <button class="btn" id="singleUploadBtn">GENERATE</button>
+            <p>OR</p>
+            <!-- CSV Upload Section -->
+            <div id="csv-section">
+                <label for="input">Choose CSV file</label>
+                <input type="file" id="input" name="input"
+                    accept=".csv, .xls, .xlsx">
+            </div>
+
+            <div class="ipa-explanation">
+                <h3>📖 How to Read the IPA Chart</h3>
+                <p>This chart represents the International Phonetic Alphabet
+                    (IPA), a system for transcribing speech sounds across
+                    languages.</p>
+                <ul>
+                    <li><strong>Consonants (Pulmonic):</strong> Made with air
+                        from the lungs. Arranged by how and where the sound is
+                        produced.</li>
+                    <li><strong>Vowels:</strong> Organized by tongue height
+                        (e.g., "close" vs "open") and position (front, central,
+                        back).</li>
+                    <li><strong>Non-Pulmonic Consonants:</strong> Special sounds
+                        like clicks, ejectives, and implosives used in certain
+                        languages.</li>
+                    <li><strong>Affricates:</strong> Begin like a stop and
+                        release like a fricative (e.g., <code>t͡ʃ</code> in
+                        "church").</li>
+                    <li><strong>Other Symbols:</strong> Rare or specialized
+                        sounds used in advanced phonetic contexts.</li>
+                </ul>
+            </div>
+
+        </main>
+        <footer>name phonetics generator</footer>
+        <div id="overlay-spinner">
+            <div class="spinner"></div>
+            <p>Processing your names... please wait</p>
+        </div>
+        <script src="/static/main.js"></script>
+    </body>
+    <script>
+    const symbolToFilename = {
+        // Pulmonic Consonants
+        'p': 'Voiceless_bilabial_plosive',
+        'b': 'Voiced_bilabial_plosive',
+        't': 'Voiceless_alveolar_plosive',
+        'd': 'Voiced_alveolar_plosive',
+        'ʈ': 'Voiceless_retroflex_plosive',
+        'ɖ': 'Voiced_retroflex_plosive',
+        'c': 'Voiceless_palatal_plosive',
+        'ɟ': 'Voiced_palatal_plosive',
+        'k': 'Voiceless_velar_plosive',
+        'g': 'Voiced_velar_plosive',
+        'q': 'Voiceless_uvular_plosive',
+        'ɢ': 'Voiced_uvular_plosive',
+        'ʔ': 'Glottal_stop',
+
+        'm': 'Bilabial_nasal',
+        'ɱ': 'Labiodental_nasal',
+        'n': 'Alveolar_nasal',
+        'ɳ': 'Retroflex_nasal',
+        'ɲ': 'Palatal_nasal',
+        'ŋ': 'Velar_nasal',
+        'ɴ': 'Uvular_nasal',
+
+        'ʙ': 'Bilabial_trill',
+        'r': 'Alveolar_trill',
+        'ʀ': 'Uvular_trill',
+
+        'ɾ': 'Alveolar_tap',
+        'ɽ': 'Retroflex_flap',
+
+        'ɸ': 'Voiceless_bilabial_fricative',
+        'β': 'Voiced_bilabial_fricative',
+        'f': 'Voiceless_labiodental_fricative',
+        'v': 'Voiced_labiodental_fricative',
+        'θ': 'Voiceless_dental_fricative',
+        'ð': 'Voiced_dental_fricative',
+        's': 'Voiceless_alveolar_fricative',
+        'z': 'Voiced_alveolar_fricative',
+        'ʃ': 'Voiceless_palato-alveolar_sibilant',
+        'ʒ': 'Voiced_palato-alveolar_sibilant',
+        'ʂ': 'Voiceless_retroflex_fricative',
+        'ʐ': 'Voiced_retroflex_fricative',
+        'ç': 'Voiceless_palatal_fricative',
+        'ʝ': 'Voiced_palatal_fricative',
+        'x': 'Voiceless_velar_fricative',
+        'ɣ': 'Voiced_velar_fricative',
+        'χ': 'Voiceless_uvular_fricative',
+        'ʁ': 'Voiced_uvular_fricative',
+        'ħ': 'Voiceless_pharyngeal_fricative',
+        'ʕ': 'Voiced_pharyngeal_fricative',
+        'h': 'Voiceless_glottal_fricative',
+        'ɦ': 'Voiced_glottal_fricative',
+
+        'ɬ': 'Voiceless_alveolar_lateral_fricative',
+        'ɮ': 'Voiced_alveolar_lateral_fricative',
+
+        'ʋ': 'Labiodental_approximant',
+        'ɹ': 'Alveolar_approximant',
+        'ɻ': 'Retroflex_approximant',
+        'j': 'Palatal_approximant',
+        'ɰ': 'Velar_approximant',
+
+        'l': 'Alveolar_lateral_approximant',
+        'ɭ': 'Retroflex_lateral_approximant',
+        'ʎ': 'Palatal_lateral_approximant',
+        'ʟ': 'Velar_lateral_approximant',
+
+        // Non-Pulmonic Consonants
+        'ʘ': 'Bilabial_click',
+        'ǀ': 'Dental_click',
+        'ǃ': 'Postalveolar_click',
+        'ǂ': 'Palato-alveolar_click',
+        'ǁ': 'Alveolar_lateral_click',
+
+        'ɓ': 'Voiced_bilabial_implosive',
+        'ɗ': 'Voiced_alveolar_implosive',
+        'ʄ': 'Voiced_palatal_implosive',
+        'ɠ': 'Voiced_velar_implosive',
+        'ʛ': 'Voiced_uvular_implosive',
+
+        'pʼ': 'Ejective_bilabial_plosive',
+        'tʼ': 'Ejective_alveolar_plosive',
+        'kʼ': 'Ejective_velar_plosive',
+        'sʼ': 'Ejective_alveolar_fricative',
+
+        // Affricates
+        't͡s': 'Voiceless_alveolar_affricate',
+        'd͡z': 'Voiced_alveolar_affricate',
+        't͡ʃ': 'Voiceless_palato-alveolar_affricate',
+        'd͡ʒ': 'Voiced_post-alveolar_affricate',
+        'ʈ͡ʂ': 'Voiceless_retroflex_affricate',
+        'ɖ͡ʐ': 'Voiced_retroflex_affricate',
+        't͡ɕ': 'Voiceless_alveolo-palatal_affricate',
+        'd͡ʑ': 'Voiced_alveolo-palatal_affricate',
+
+        // Other Symbols
+        'ʍ': 'Voiceless_labialvelar_fricative',
+        'w': 'Voiced_labialvelar_approximant',
+        'ʜ': 'Voiceless_epiglottal_fricative',
+        'ʢ': 'Voiced_epiglottal_fricative',
+        'ɕ': 'Voiceless_alveolo-palatal_fricative',
+        'ʑ': 'Voiced_alveolo-palatal_fricative',
+        'ɺ': 'Alveolar_lateral_flap',
+        'ɧ': 'Simultaneous_ʃ_and_x',
+
+        // Vowels
+        'i': 'Close_front_unrounded_vowel',
+        'y': 'Close_front_rounded_vowel',
+        'ɨ': 'Close_central_unrounded_vowel',
+        'ʉ': 'Close_central_rounded_vowel',
+        'ɯ': 'Close_back_unrounded_vowel',
+        'u': 'Close_back_rounded_vowel',
+        'ɪ': 'Near-close_front_unrounded_vowel',
+        'ʏ': 'Near-close_front_rounded_vowel',
+        'ʊ': 'Near-close_back_rounded_vowel',
+        'e': 'Close-mid_front_unrounded_vowel',
+        'ø': 'Close-mid_front_rounded_vowel',
+        'ɘ': 'Close-mid_central_unrounded_vowel',
+        'ɵ': 'Close-mid_central_rounded_vowel',
+        'ɤ': 'Close-mid_back_unrounded_vowel',
+        'o': 'Close-mid_back_rounded_vowel',
+        'ə': 'Mid_central_vowel',
+        'ɛ': 'Open-mid_front_unrounded_vowel',
+        'œ': 'Open-mid_front_rounded_vowel',
+        'ɜ': 'Open-mid_central_unrounded_vowel',
+        'ɞ': 'Open-mid_central_rounded_vowel',
+        'ʌ': 'Open-mid_back_unrounded_vowel',
+        'ɔ': 'Open-mid_back_rounded_vowel',
+        'æ': 'Near-open_front_unrounded_vowel',
+        'ɐ': 'Near-open_central_vowel',
+        'a': 'Open_front_unrounded_vowel',
+        'ɶ': 'Open_front_rounded_vowel',
+        'ɑ': 'Open_back_unrounded_vowel',
+        'ɒ': 'Open_back_rounded_vowel',
+
+        // Diphthongs (common examples)
+        'aɪ': 'Diphthong_aɪ',
+        'aʊ': 'Diphthong_aʊ',
+        'ɔɪ': 'Diphthong_ɔɪ',
+        'eɪ': 'Diphthong_eɪ',
+        'oʊ': 'Diphthong_oʊ',
+        'ɪə': 'Diphthong_ɪə',
+        'eə': 'Diphthong_eə',
+        'ʊə': 'Diphthong_ʊə'
+    };
+
+    function playSound(symbol) {
+        const filename = symbolToFilename[symbol];
+        if (!filename) {
+            alert("No audio available for this symbol.");
+            return;
+        }
+        const audio = new Audio("/static_audio/" + filename + ".ogg");
+        console.log(audio);
+        audio.play();
+    }
+</script>
+
+</html>

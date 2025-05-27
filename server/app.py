@@ -1,5 +1,6 @@
 import datetime
 import os
+import shutil
 from pathlib import Path
 import sys
 import time
@@ -569,6 +570,8 @@ async def transcription(data: dict = Body(...)):
 
     full_name = f'{first} {last}'
 
+    clearAudio()
+
     if country == "":
         languages = list()
         transcriptions = list()
@@ -602,6 +605,8 @@ async def transcription(data: dict = Body(...)):
 async def batch_transcription(file: UploadFile = File(...)):
     """Processes a batch file and returns transcriptions with audio."""
     try:
+        clearAudio()
+        
         # Read file
         filename = file.filename.lower()
 
@@ -688,3 +693,14 @@ def getUsages(name: str):
                         usages.add(usage["usage_full"])
         time.sleep(1)
     return usages
+
+def clearAudio():
+    for filename in os.listdir(AUDIO_DIR):
+        file_path = os.path.join(AUDIO_DIR, filename)
+        try:
+            if (os.path.isfile(file_path) or os.path.islink(file_path)):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
